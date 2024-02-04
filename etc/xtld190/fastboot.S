@@ -145,9 +145,6 @@ fastboot_rescueMode:
 			mov UR29, 0
 			isv UR29, 9999872
 			isv UR29, 9999881
-			ild <info_BSTATE>, UR0
-			mov2 UR28, <fastboot_clear_comm2_0_byte>
-			if UR0 != UR29, UR28
 			
 			mov UR16, 1
 			;; смена цвета ячеек видеопамяти на белый
@@ -245,9 +242,6 @@ fastboot_rescueMode:
 			mov UR29, 0
 			isv UR29, 9999872
 			isv UR29, 9999881
-			ild <info_BSTATE>, UR0
-			mov2 UR28, <fastboot_clear_comm2_0_byte>
-			if UR0 != UR29, UR28
 			
 			mov UR16, 1
 			;; смена цвета ячеек видеопамяти на белый
@@ -345,9 +339,6 @@ fastboot_rescueMode:
 			mov UR29, 0
 			isv UR29, 9999872
 			isv UR29, 9999881
-			ild <info_BSTATE>, UR0
-			mov2 UR28, <fastboot_clear_comm2_0_byte>
-			if UR0 != UR29, UR28
 			
 			mov UR16, 1
 			;; смена цвета ячеек видеопамяти на белый
