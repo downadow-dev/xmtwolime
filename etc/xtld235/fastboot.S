@@ -468,6 +468,7 @@ fastboot_rescueMode:
 
 
 	fastboot_unlock:
+		mov UR1, 0
 		mov UR29, 2
 		slp UR29
 		mov UR29, 'u'
