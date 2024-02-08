@@ -1,0 +1,7 @@
+xloader:1302-1394
+fastboot:1395-3885
+recovery:3886-8297
+info:8298-8367
+boot:8368-13118
+system:13119-6899999
+userdata:6900-9999999
