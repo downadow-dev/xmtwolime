@@ -40,8 +40,8 @@ boot_start:
 	.def %R_ZERO% "UR0"
 
 	;; начало и конец пространства данных обычного пользователя
-	.def %ORDINARY_USER_SPACE_ST%, "8700000"
-	.def %ORDINARY_USER_SPACE_ND%, "9999999"
+	.def %ORDINARY_USER_SPACE_ST% "8700000"
+	.def %ORDINARY_USER_SPACE_ND% "9999999"
 
 	;; адрес начала раздела вывода
 	.def %OUT_ST% "0126"
