@@ -46,7 +46,6 @@ public class Builder {
 			
 			boolean s = false;
 			
-			// если пользователь дал необязательный аргумент '-k' или '--kernel'
 			if(args[0].equals("-p") || args[0].equals("--bootrom-etc")) {
 				pathToBootromEtc = args[1];
 				pathToKernel = args[2];
