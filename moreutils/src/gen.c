@@ -21,7 +21,7 @@ int main() {
 	int num = alloc(1);
 	
 	for(int i = 0; i < 16; i++) {
-		gen(num);
+		gen(9, num);
 		put_mn(num, _OUT_ST + i);
 	}
 	
