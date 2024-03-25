@@ -23,7 +23,7 @@ int main() {
 	
 	getreg(_R_USER, user);
 	
-	ifmn(_R_USER, _NE, 0, "<num_endif0>");
+	ifmn(user, _NE, 0, "<num_endif0>");
 		ifmn(addr, _LT, _ORDINARY_USER_SPACE_ST, "<num_endif1>");
 			aprint("root required", _OUT_ST);
 			exit_app(1);

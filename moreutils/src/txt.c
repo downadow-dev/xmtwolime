@@ -27,7 +27,7 @@ int main() {
 	getreg(_R_USER, user);
 	
 	/* UID 0 = root */
-	ifmn(_R_USER, _NE, 0, "<txt_endif0>");
+	ifmn(user, _NE, 0, "<txt_endif0>");
 		ifmn(pointer, _LT, _ORDINARY_USER_SPACE_ST, "<txt_endif1>");
 			aprint("root required", _OUT_ST);
 			exit_app(1);
@@ -41,7 +41,7 @@ int main() {
 	L("txt_loop");
 		get_char(key);
 		
-		ifmn(_R_USER, _NE, 0, "<txt_loop_endif2>");
+		ifmn(user, _NE, 0, "<txt_loop_endif2>");
 			ifmn(pointer, _LT, _ORDINARY_USER_SPACE_ST, "<txt_loop_endif3>");
 				exit_app(2);
 			L("txt_loop_endif3");
