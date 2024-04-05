@@ -32,7 +32,7 @@ int main() {
 	
 	for(int i = 0; i < 25; i++, inc(addr)) {
 		mcopymn(addr, value);
-		put_mn(value, _OUT_ST + 63 * i);
+		put_mn(value, _OUT_ST + _LINE_SIZE * i);
 	}
 	
 	exit_app(0);

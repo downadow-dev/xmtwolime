@@ -34,13 +34,13 @@ int main() {
 	L("clr_endif");
 	
 	aprint("black         0", _OUT_ST);
-	aprint("white         1", _OUT_ST + 63);
-	aprint("green         2", _OUT_ST + 63 * 2);
-	aprint("blue          3", _OUT_ST + 63 * 3);
-	aprint("green2        4", _OUT_ST + 63 * 4);
-	aprint("grey          5", _OUT_ST + 63 * 5);
-	aprint("red           6", _OUT_ST + 63 * 6);
-	aprint("yellow        7", _OUT_ST + 63 * 7);
+	aprint("white         1", _OUT_ST + _LINE_SIZE);
+	aprint("green         2", _OUT_ST + _LINE_SIZE * 2);
+	aprint("blue          3", _OUT_ST + _LINE_SIZE * 3);
+	aprint("green2        4", _OUT_ST + _LINE_SIZE * 4);
+	aprint("grey          5", _OUT_ST + _LINE_SIZE * 5);
+	aprint("red           6", _OUT_ST + _LINE_SIZE * 6);
+	aprint("yellow        7", _OUT_ST + _LINE_SIZE * 7);
 	
 	exit_app(0);
 }
