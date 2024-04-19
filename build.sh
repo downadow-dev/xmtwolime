@@ -17,3 +17,4 @@ cd ../software
 java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder -p ../etc/$2/ ../kernel.S $(ls) > ../image
 cd ..
 java -cp "$1" downadow.makexm2c_tools.main.Assembler image image
+rm software/*.c.s
