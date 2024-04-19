@@ -179,6 +179,8 @@ public class Builder {
 					while(sc.hasNextLine()) System.out.println(sc.nextLine());
 					sc.close();
 				}
+				
+				System.out.println("system_appsEnd:");
 			} else {
 				sc = new Scanner(new File(pathToBootromEtc + "/system.S"));
 				while(sc.hasNextLine()) System.out.println(sc.nextLine());
