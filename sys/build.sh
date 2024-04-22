@@ -7,8 +7,12 @@ if [[ "$1" == "" ]] then
 	exit
 fi
 
-for prog in `ls src`; do
-	cc src/$prog -o tmp
+for prog in `ls`; do
+    if [[ "$prog" == "build.sh" ]] then
+        continue
+    fi
+    
+	cc ./$prog -o tmp
 	./tmp > "$1/$prog.s"
 	rm tmp
 done

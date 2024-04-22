@@ -9,7 +9,7 @@ if [[ "$2" == "" || "$1" == "--help" ]] then
 	exit
 fi
 
-cd utils-2
+cd sys
 ./build.sh ../software
 cd ../os-builder
 javac --release 8 downadow/xmtwolime_builder/main/Builder.java
