@@ -48,7 +48,7 @@ boot_start:
 
 	.def %R_KEY% "UR1"
 	
-	mov UR6, 1
+	mov UR6, 0
 	isv UR6, <_is_root_allowed?>
 
 	_is_root_allowed?:
