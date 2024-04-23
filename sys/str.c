@@ -30,10 +30,14 @@ int main() {
 		L("str_endif1");
 	L("str_endif0");
 	
-	for(int i = _OUT_ST; i < 1000; i++, inc(addr)) {
+	int i = alloc(1);
+	mset(i, _OUT_ST);
+	L("str_loop");
 	    mcopymn(addr, c);
-	    put_mc(c, i);
-	}
+	    put_mcm(c, i);
+	    inc(addr);
+	    inc(i);
+	ifmn(i, _GT, 1600, "<str_loop>");
 	
 	exit_app(0);
 }
