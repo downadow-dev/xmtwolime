@@ -54,6 +54,8 @@ txt:
             mov %R_FA_2%, %OUT_ST%
             mov2 %R_FA_3%, <txt_exit2>
             if %R_FA_1% < %R_FA_2%, %R_FA_3%
+            mov2 %R_FA_2%, 0001800
+            if %R_FA_1% > %R_FA_2%, %R_FA_3%
             mov2 %R_FA_2%, <txt_loop>
             if %R_KEY% == %R_ZERO%, %R_FA_2%
             mov %R_FA_3%, 8

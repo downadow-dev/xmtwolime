@@ -55,7 +55,7 @@ str:
 		
 		str_main_output:
 			mov %R_FA_10%, %OUT_ST%
-			mov2 %R_FA_9%, 0001500
+			mov2 %R_FA_9%, 0001800
 			mov2 %R_FA_7%, <str_main_output_loop>
 			
 			str_main_output_loop:
