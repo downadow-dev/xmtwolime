@@ -14,7 +14,7 @@ boot_start:
 	;    иное — обычный пользователь
 	.def %R_USER% "UR29"
 
-	;; п. регистры 18..28 и 6 предназначены для приложений;
+	;; п. регистры, которые предназначены для приложений;
 	;; но это не запрещает использование их ядром
 	.def %R_FA_0% "UR28"
 	.def %R_FA_1% "UR27"
@@ -27,6 +27,40 @@ boot_start:
 	.def %R_FA_8% "UR20"
 	.def %R_FA_9% "UR19"
 	.def %R_FA_10% "UR18"
+	.def %R_FA_11% "UR30"
+    .def %R_FA_12% "UR31"
+    .def %R_FA_13% "UR32"
+    .def %R_FA_14% "UR33"
+    .def %R_FA_15% "UR34"
+    .def %R_FA_16% "UR35"
+    .def %R_FA_17% "UR36"
+    .def %R_FA_18% "UR37"
+    .def %R_FA_19% "UR38"
+    .def %R_FA_20% "UR39"
+    .def %R_FA_21% "UR40"
+    .def %R_FA_22% "UR41"
+    .def %R_FA_23% "UR42"
+    .def %R_FA_24% "UR43"
+    .def %R_FA_25% "UR44"
+    .def %R_FA_26% "UR45"
+    .def %R_FA_27% "UR46"
+    .def %R_FA_28% "UR47"
+    .def %R_FA_29% "UR48"
+    .def %R_FA_30% "UR49"
+    .def %R_FA_31% "UR50"
+    .def %R_FA_32% "UR51"
+    .def %R_FA_33% "UR52"
+    .def %R_FA_34% "UR53"
+    .def %R_FA_35% "UR54"
+    .def %R_FA_36% "UR55"
+    .def %R_FA_37% "UR56"
+    .def %R_FA_38% "UR57"
+    .def %R_FA_39% "UR58"
+    .def %R_FA_40% "UR59"
+    .def %R_FA_41% "UR60"
+    .def %R_FA_42% "UR61"
+    .def %R_FA_43% "UR62"
+    .def %R_FA_44% "UR63"
 
 	;; используйте п. регистр 6 как содержащий код возврата
 	;; ваших программ
