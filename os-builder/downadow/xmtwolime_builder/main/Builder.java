@@ -67,44 +67,44 @@ public class Builder {
 			System.out.println("info_start:");
 			for(int iii = 0; iii < 12; iii++) {
 				System.out.println("\tinfo_PKEYCHAR" + iii + "_address:");
-				System.out.println("\t\tmov UR0, " + pkey.toCharArray()[iii]);
+				System.out.println("\t\t.byte " + pkey.toCharArray()[iii]);
 			}
 			
 			System.out.println("\tinfo_KEYCHAR0_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[10] + 1 - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[10] + 1 - 48));
 			
 			System.out.println("\tinfo_KEYCHAR1_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[0] - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[0] - 48));
 			
 			System.out.println("\tinfo_KEYCHAR2_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[2] - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[2] - 48));
 			
 			System.out.println("\tinfo_KEYCHAR3_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[1] - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[1] - 48));
 			
 			System.out.println("\tinfo_KEYCHAR4_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[8] + 1 - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[8] + 1 - 48));
 			
 			System.out.println("\tinfo_KEYCHAR5_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[8] - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[8] - 48));
 			
 			System.out.println("\tinfo_KEYCHAR6_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[7] - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[7] - 48));
 			
 			System.out.println("\tinfo_KEYCHAR7_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[6] - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[6] - 48));
 			
 			System.out.println("\tinfo_KEYCHAR8_address:");
 			if((int)pkey.toCharArray()[0] - 48 < 6)
-				System.out.println("\t\tmov UR0, 0");
+				System.out.println("\t\t.byte 0");
 			else
-				System.out.println("\t\tmov UR0, 1");
+				System.out.println("\t\t.byte 1");
 			
 			System.out.println("\tinfo_KEYCHAR9_address:");
-			System.out.println("\t\tmov UR0, " + ((int)pkey.toCharArray()[3] + 1 - 48));
+			System.out.println("\t\t.byte " + ((int)pkey.toCharArray()[3] + 1 - 48));
 			
 			System.out.println("\tinfo_BSTATE:");
-			System.out.println("\t\tmov UR0, 1");
+			System.out.println("\t\t.byte 1");
 			
 			System.out.println("info_end:");
 			System.out.println("\tnop");
