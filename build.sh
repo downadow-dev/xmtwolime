@@ -1,7 +1,7 @@
 #!/bin/bash
 # автор            downadow (Sviatoslav)
 
-if [[ "$2" == "" || "$1" == "--help" ]] then
+if [[ "$2" == "" || "$1" == "--help" ]]; then
 	echo "Использование:  bash build.sh [--help] ПУТЬ_К_MAKEXM2C-TOOLS ТИП"
 	echo
 	echo "ТИП может быть одним из следующих:"
@@ -12,7 +12,7 @@ fi
 mkdir -p software
 cp sys/* software/
 cd os-builder
-javac --release 8 downadow/xmtwolime_builder/main/Builder.java
+javac downadow/xmtwolime_builder/main/Builder.java
 cd ../software
 java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder -p ../etc/$2/ ../kernel.S $(ls) > ../image
 cd ..
