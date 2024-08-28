@@ -14,6 +14,7 @@ public class Builder {
 			System.exit(1);
 		}
 		
+		String apps_str = "";
 		try {
 			
 			/* сначала выводим текст БИОСа и ядра */
@@ -58,6 +59,8 @@ public class Builder {
 				System.out.println("\t\t\t\t\tmov2 UR25, <" + filename[0] + filename[1] + filename[2] + ">");
 				System.out.println("\t\t\t\t\tjmp UR25");
 				
+				apps_str += "" + filename[0] + filename[1] + filename[2] + ":<" + filename[0] + filename[1] + filename[2] + ">;";
+				
 				ii++;
 			}
 			/* напечатать код, который будет исполняться, если команда не найдена */
@@ -75,7 +78,12 @@ public class Builder {
 				sc.close();
 			}
 			
+			System.out.println("system_apps:");
+			System.out.println(".goto +" + (apps_str.replace("<", "000").length() + 1));
+			System.out.println(".ascii <system_apps> \"" + apps_str.replace('"', '_') + "\"");
+			
 			System.out.println("system_appsEnd:");
+			System.out.println("nop");
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.exit(2);
