@@ -59,13 +59,6 @@ boot_start:
 	_is_root_allowed?:
 		nop
 	
-	;;; мы хотим boot-анимацию?
-	
-	mov2 UR16, <system_bootanim>
-	jmp UR16
-	
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	
 	boot_continue:
 		mov UR0, 0
 		mov UR1, 0
@@ -341,8 +334,7 @@ boot_start:
 						
 						updd
 						
-						mov2 %R_FA_0%, <system_bootanim_end>
-						jmp %R_FA_0%
+						; ...
 
 
 
