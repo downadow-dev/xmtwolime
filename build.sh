@@ -9,6 +9,8 @@ makexm2ctools_path='../makexm2c-tools'
 
 #####################################################
 
+mkdir -p software
+
 echo > sys/main.c
 for prog in `ls sys/???.c`; do
     echo '#define main '`basename $prog .c` >> sys/main.c
@@ -34,7 +36,6 @@ python3 $xmconcc_path/xmconcc.py . xtl $xmconcc_path/tmp.xcc > software/xtl_sys.
 rm -f $xmconcc_path/tmp.xcc *tab.py
 
 
-mkdir -p software
 cd os-builder
 javac downadow/xmtwolime_builder/main/Builder.java
 cd ../software
