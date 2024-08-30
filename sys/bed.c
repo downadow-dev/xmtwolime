@@ -1,10 +1,11 @@
-#include <useful.h>
 #include <xmtwolime.h>
+#include <useful.h>
+#include <___get_args.h>
 #include "check_root.h"
 
 int main(int argc, char *argv[]) {
-    if(argc < 2) {
-        puts("usage: xtl del <address>");
+    if(argc < 3) {
+        puts("usage: xtl bed <address> <value>");
         exit(EXIT_FAILURE);
     }
     
@@ -12,6 +13,6 @@ int main(int argc, char *argv[]) {
     
     check_addr(addr);
     
-    memset(&mem[addr], '\0', strlen(&mem[addr]));
+    mem[addr] = atoi(argv[2]);
 }
 

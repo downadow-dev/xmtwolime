@@ -9,10 +9,9 @@ int main(int argc, char *argv[]) {
     if(argc < 2) {
         puts("usage: xtl txt <address>");
         exit(EXIT_FAILURE);
-    } else if((addr = atoi(argv[1])) < USERSPACE_START && getuid() != UID_ROOT) {
-        puts("root required");
-        exit(EXIT_FAILURE);
     }
+    
+    check_addr(addr = atoi(argv[1]));
     
     char buf[256];
     do {

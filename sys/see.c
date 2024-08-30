@@ -1,6 +1,7 @@
 #include <xmtwolime.h>
 #include <useful.h>
 #include <___get_args.h>
+#include "check_root.h"
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
@@ -10,10 +11,7 @@ int main(int argc, char *argv[]) {
     
     int addr = atoi(argv[1]);
     
-    if(addr < USERSPACE_START && getuid() != UID_ROOT) {
-        puts("root required");
-        exit(EXIT_FAILURE);
-    }
+    check_addr(addr);
     
     while(true) {
         clear_output();
