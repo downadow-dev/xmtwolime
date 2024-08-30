@@ -45,6 +45,10 @@ int main(int argc, char *argv[]) {
                 stackptr++;
                 break;
             
+            case '?':
+                stack[stackptr++] = sel(10);
+                break;
+            
             /* число */
             default:
                 stack[stackptr++] = atoi(argv[i]);
