@@ -28,7 +28,12 @@ int main(int argc, char *argv[]) {
                 printf("\n");
                 
                 if(nflag) {
-                    printf("@@ %d\n", &mem[addr + i + 1]);
+                    setcolor(WHITE);
+                    setcolor(GREY);
+                    printf("%d", &mem[addr + i + 1]);
+                    setcolor(WHITE);
+                    printf("\n");
+                    
                     j++;
                 }
                 
