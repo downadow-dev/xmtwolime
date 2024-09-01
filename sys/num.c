@@ -17,13 +17,13 @@ int main(int argc, char *argv[]) {
         clear_output();
         
         for(int i = 0; i < 27; i++) {
-            printf("%d: %d\n", addr + i, mem[addr + i]);
+            printf("%d: %d '%c'\n", addr + i, mem[addr + i], mem[addr + i]);
         }
         
         if(getchar() == 'q')
             exit(EXIT_SUCCESS);
         
-        addr++;
+        addr += 4;
     }
 }
 

@@ -1,3 +1,6 @@
+/* редактирование текста */
+
+
 #include <xmtwolime.h>
 #include <___get_args.h>
 #include <useful.h>
@@ -13,11 +16,24 @@ int main(int argc, char *argv[]) {
     
     check_addr(addr = atoi(argv[1]));
     
-    char buf[256];
-    do {
+    char buf[63];
+    for(;;) {
+        for(char *p = &mem[addr]; *p && *p != '\n'; p++)
+            putchar(*p);
+        printf("\r");
+        
+        /************************************/
+        
         gets(buf, sizeof(buf));
+        
+        if(buf[0] == EOT)
+            break;
+        
+        memset(&buf[strlen(buf)], ' ', sizeof(buf) - 1);
+        buf[sizeof(buf) - 1] = '\0';
+        
         addr = memcpy(&mem[addr], buf, strlen(buf)) + strlen(buf);
         mem[addr++] = '\n';
-    } while(buf[strlen(buf) - 1] != EOT);
+    }
 }
 

@@ -5,8 +5,15 @@
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl see <address>");
+        puts("usage: xtl see [-n] <address>");
         exit(EXIT_FAILURE);
+    }
+    
+    bool nflag = false;
+    
+    if(argv[1][0] == '-' && argv[1][1] == 'n') {
+        nflag = true;
+        ++argv;
     }
     
     int addr = atoi(argv[1]);
@@ -19,6 +26,12 @@ int main(int argc, char *argv[]) {
         for(int i = 0, j = 0; j < 25; i++) {
             if(mem[addr + i] == '\n') {
                 printf("\n");
+                
+                if(nflag) {
+                    printf("@@ %d\n", &mem[addr + i + 1]);
+                    j++;
+                }
+                
                 j++;
             } else if(mem[addr + i] == '\0' || mem[addr + i] == EOT) {
                 break;
