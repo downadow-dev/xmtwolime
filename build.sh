@@ -30,7 +30,7 @@ echo '}' >> sys/main.c
 
 #####################################################
 
-python3 $ctoxmconc_path/c2xcc.py sys/main.c -I$ctoxmconc_path/include > $xmconcc_path/tmp.xcc
+python3 $ctoxmconc_path/c2xcc.py sys/main.c "-I$ctoxmconc_path/include -Iinclude" > $xmconcc_path/tmp.xcc
 python3 $xmconcc_path/xmconcc.py . xtl $xmconcc_path/tmp.xcc > software/xtl_sys.s
 
 rm -f $xmconcc_path/tmp.xcc *tab.py
