@@ -12,7 +12,13 @@ void check_root(void) {
 }
 
 void check_addr(int addr) {
-    if(addr < USERSPACE_START) check_root();
+    if(addr < 0 || addr > 9999999) {
+        puts("invalid address");
+        exit(EXIT_FAILURE);
+    }
+    
+    if(addr < USERSPACE_START)
+        check_root();
 }
 
 #endif

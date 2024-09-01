@@ -1,3 +1,6 @@
+/* сравнение двух областей памяти */
+
+
 #include <useful.h>
 #include <gets.h>
 #include <xmtwolime.h>
@@ -17,7 +20,7 @@ int main(int argc, char *argv[]) {
     
     size_t length1 = strlen(&mem[addr1]), length2 = strlen(&mem[addr2]);
     
-    printf("%d  %d\n\n", length1, length2);
+    if(length1 != length2) exit(2);
     
     bool eq = true;
     for(int i = 0; i < length1 && i < length2; i++) {
