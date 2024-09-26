@@ -12,7 +12,7 @@ makexm2ctools_path='../makexm2c-tools'
 mkdir -p software
 
 echo > sys/main.c
-for prog in `ls sys/???.c`; do
+for prog in sys/???.c; do
     echo '#define main '`basename $prog .c` >> sys/main.c
     echo '#include "'`basename $prog`'"' >> sys/main.c
     echo '#undef main' >> sys/main.c
@@ -21,7 +21,7 @@ done
 echo 'int main(int argc, char *argv[]) {' >> sys/main.c
 echo '    if(argc < 2) exit(3);' >> sys/main.c
 
-for prog in `ls sys/???.c`; do
+for prog in sys/???.c; do
     echo '    else if(strcmp(argv[1], "'`basename $prog .c`'")) ' "`basename $prog .c`" '(argc - 1, argv + 1);' >> sys/main.c
 done
 
