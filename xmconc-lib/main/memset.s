@@ -10,6 +10,8 @@ __0_memset:
     dec %R_FA_9%
     ild %R_FA_9%, %R_FA_0%
     
+    inc %R_FA_9%
+    
     mov2 %R_FA_3%, <LIB_memset>
     LIB_memset:
         isv %R_FA_1%, %R_FA_0%
