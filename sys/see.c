@@ -1,11 +1,10 @@
 #include <xmtwolime.h>
 #include <useful.h>
 #include <___get_args.h>
-#include "check_root.h"
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl see [-n] <address>");
+        puts("usage: xtl see [-n] <file>");
         exit(EXIT_FAILURE);
     }
     
@@ -16,21 +15,26 @@ int main(int argc, char *argv[]) {
         ++argv;
     }
     
-    int addr = atoi(argv[1]);
+    fd_t f = file(argv[1]);
+    if(f == -1) {
+        puts("see: file opening error");
+        exit(EXIT_FAILURE);
+    }
     
-    check_addr(addr);
+    char *addr = filedata(f);
+    char *start = addr;
     
     while(true) {
         clear_output();
         
         for(int i = 0, j = 0; j < 25; i++) {
-            if(mem[addr + i] == '\n') {
+            if(addr[i] == '\n') {
                 printf("\n");
                 
                 if(nflag) {
                     setcolor(WHITE);
                     setcolor(GREY);
-                    printf("%d", &mem[addr + i + 1]);
+                    printf("%d", (addr + i + 1) - start);
                     setcolor(WHITE);
                     printf("\n");
                     
@@ -38,10 +42,10 @@ int main(int argc, char *argv[]) {
                 }
                 
                 j++;
-            } else if(mem[addr + i] == '\0' || mem[addr + i] == EOT) {
+            } else if(addr[i] == '\0' || addr[i] == EOT) {
                 break;
             } else {
-                printf("%c", mem[addr + i]);
+                printf("%c", addr[i]);
             }
         }
         
@@ -49,7 +53,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         
         addr++;
-        while(mem[addr - 1] != '\n' && mem[addr - 1] != '\0')
+        while(addr[-1] != '\n' && addr[-1] != '\0')
             addr++;
     }
 }

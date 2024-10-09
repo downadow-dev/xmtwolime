@@ -1,20 +1,21 @@
 #include <useful.h>
 #include <xmtwolime.h>
+#include <file.h>
 #include <___get_args.h>
-#include "check_root.h"
 
 int main(int argc, char *argv[]) {
     if(argc < 3) {
-        puts("usage: xtl cpy <addr1> <addr2>");
+        puts("usage: xtl cpy <file_src> <file_dst>");
         exit(EXIT_FAILURE);
     }
     
-    int addr1 = atoi(argv[1]),
-        addr2 = atoi(argv[2]);
+    fd_t fsrc = file (argv[1]);
+    fd_t fdst = creat(argv[2]);
+    if(fsrc == -1 || fdst == -1) {
+        puts("cpy: file opening error");
+        exit(EXIT_FAILURE);
+    }
     
-    check_addr(addr1);
-    check_addr(addr2);
-    
-    memcpy(&mem[addr2], &mem[addr1], strlen(&mem[addr1]) + 1);
+    memcpy(filedata(fdst), filedata(fsrc), FILESIZE);
 }
 

@@ -7,18 +7,21 @@
 #include <gets.h>
 
 int main(int argc, char *argv[]) {
-    int addr, uid;
-    
     if(argc < 2) {
-        puts("usage: xtl txt <address>");
+        puts("usage: xtl txt <file> [<position>]");
         exit(EXIT_FAILURE);
     }
     
-    check_addr(addr = atoi(argv[1]));
+    fd_t f = creat(argv[1]);
+    if(f == -1) {
+        puts("txt: file opening error");
+        exit(EXIT_FAILURE);
+    }
     
     char buf[63];
+    char *addr = filedata(f) + (argc > 2 ? atoi(argv[2]) : 0);
     for(;;) {
-        for(char *p = &mem[addr]; *p && *p != '\n'; p++)
+        for(char *p = addr; *p && *p != '\n'; p++)
             putchar(*p);
         printf("\r");
         
@@ -32,8 +35,8 @@ int main(int argc, char *argv[]) {
         memset(&buf[strlen(buf)], ' ', sizeof(buf) - 1);
         buf[sizeof(buf) - 1] = '\0';
         
-        addr = memcpy(&mem[addr], buf, strlen(buf)) + strlen(buf);
-        mem[addr++] = '\n';
+        addr = memcpy(addr, buf, strlen(buf)) + strlen(buf);
+        *addr++ = '\n';
     }
 }
 

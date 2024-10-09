@@ -1,21 +1,25 @@
 #include <useful.h>
 #include <xmtwolime.h>
-#include "check_root.h"
+#include <file.h>
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl cnt <address>...");
+        puts("usage: xtl cnt <file>...");
         exit(EXIT_FAILURE);
     }
     
     for(int i = 1; i < argc; i++) {
-        int addr = atoi(argv[i]);
+        fd_t f = file(argv[i]);
+        if(f == -1) {
+            puts("cnt: file opening error");
+            exit(EXIT_FAILURE);
+        }
         
-        check_addr(addr);
+        char *addr = filedata(f);
         
         int lines = 1;
-        for(int j = addr; mem[j]; j++)
-            if(mem[j] == '\n')
+        for(char *j = addr; *j; j++)
+            if(*j == '\n')
                 lines++;
         
         printf("%d %d\n", strlen(addr), lines);

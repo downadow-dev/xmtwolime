@@ -3,9 +3,6 @@
 
 #define __xmtwolime_h     1
 
-
-int *mem = (int *) 0;
-
 /* какие-то константы */
 #define USERSPACE_START   8700000
 #define USERSPACE_END     9999999

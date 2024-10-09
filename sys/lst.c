@@ -1,12 +1,9 @@
-/* вывести список установленных программ и библиотек */
+/* вывести список файлов */
+
+#include <file.h>
 
 int main(void) {
-    char *s;
-    
-    for(s = (char *) __extern_label("system_apps"); *s; s++) {
-        if(*s == ':') {
-            printf("%c%c%c ", s[-3], s[-2], s[-1]);
-        }
-    }
+    char buf[10000];
+    puts(list_files(buf, sizeof buf));
 }
 
