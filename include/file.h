@@ -13,7 +13,7 @@ typedef char * fd_t;
 
 char *__files = USERSPACE_START;
 
-#define filedata(fd)  (fd+MAX_PATH)
+#define filedata(fd)  ((fd)+MAX_PATH)
 
 /* получение адреса файла */
 fd_t file(char *name) {
