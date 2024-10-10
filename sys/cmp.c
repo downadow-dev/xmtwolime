@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     
     fd_t f1 = file(argv[1]);
     fd_t f2 = file(argv[2]);
-    if(f1 == -1 || f2 == -1) {
+    if(f1 == NULL || f2 == NULL) {
         puts("cmp: file opening error");
         exit(EXIT_FAILURE);
     }

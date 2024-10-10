@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     }
     
     fd_t f = file(argv[1]);
-    if(f == -1) {
+    if(f == NULL) {
         puts("num: file opening error");
         exit(EXIT_FAILURE);
     }

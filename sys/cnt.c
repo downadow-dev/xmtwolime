@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     
     for(int i = 1; i < argc; i++) {
         fd_t f = file(argv[i]);
-        if(f == -1) {
+        if(f == NULL) {
             puts("cnt: file opening error");
             exit(EXIT_FAILURE);
         }

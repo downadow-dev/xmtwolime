@@ -3,13 +3,12 @@
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl del <file>");
+        puts("usage: xtl del <file>...");
         exit(EXIT_FAILURE);
     }
     
-    if(unlink(argv[1]) == -1) {
-        puts("del: unlink() failure");
-        exit(EXIT_FAILURE);
-    }
+    for(int i = 1; i < argc; i++)
+        unlink(argv[i]);
+    
 }
 

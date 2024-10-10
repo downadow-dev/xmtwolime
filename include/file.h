@@ -18,13 +18,13 @@ char *__files = USERSPACE_START;
 /* получение адреса файла */
 fd_t file(char *name) {
     if(*name == '.' && getuid() != UID_ROOT)
-        return -1;
+        return NULL;
     
     for(int i = 0; i < MAX_FILES; i++)
         if(strcmp(&__files[i * FILE_SIZE], name))
             return &__files[i * FILE_SIZE];
     
-    return -1;
+    return NULL;
 }
 
 /* создание файла */
@@ -32,9 +32,9 @@ fd_t creat(char *name) {
     fd_t fd;
     
     if(*name == '.' && getuid() != UID_ROOT)
-        return -1;
+        return NULL;
     
-    if((fd = file(name)) != -1)
+    if(fd = file(name))
         return fd;
     
     for(int i = 0; i < MAX_FILES; i++) {
@@ -45,7 +45,7 @@ fd_t creat(char *name) {
         }
     }
     
-    return -1;
+    return NULL;
 }
 
 /* удаление файла */
@@ -55,7 +55,7 @@ int unlink(char *name) {
     if(*name == '.' && getuid() != UID_ROOT)
         return -1;
     
-    if((fd = file(name)) != -1) {
+    if(fd = file(name)) {
         *fd = '\0';
         return 0;
     } else {
@@ -70,7 +70,7 @@ int rename(char *oldname, char *newname) {
     if((*oldname == '.' || *newname == '.') && getuid() != UID_ROOT)
         return -1;
     
-    if((fd = file(oldname)) != -1) {
+    if((fd = file(oldname)) && file(newname) == NULL) {
         memcpy(fd, newname, strlen(newname) + 1);
         return 0;
     } else {
@@ -78,24 +78,20 @@ int rename(char *oldname, char *newname) {
     }
 }
 
-char *list_files(char *buf, size_t n) {
-    char *p = buf;
+int __nextfile_count = 0;
+
+char *fnext(void) {
+    while(__files[__nextfile_count * FILE_SIZE] == '\0' && __nextfile_count < MAX_FILES)
+        __nextfile_count++;
     
-    for(int i = 0; i < MAX_FILES && (p - buf) < n; i++) {
-        if(__files[i * FILE_SIZE] != '\0') {
-            /* файлы root'а не показываются */
-            if(__files[i * FILE_SIZE] == '.' && getuid() != UID_ROOT)
-                continue;
-            
-            memcpy(p, &__files[i * FILE_SIZE], strlen(&__files[i * FILE_SIZE]));
-            p += strlen(&__files[i * FILE_SIZE]);
-            *p++ = ' ';
-        }
-    }
-    *(p-1) = '\0';
+    if(__nextfile_count >= MAX_FILES)
+        return NULL;
     
-    return buf;
+    return &__files[(__nextfile_count++) * FILE_SIZE];
 }
 
+void freset(void) {
+    __nextfile_count = 0;
+}
 
 #endif
