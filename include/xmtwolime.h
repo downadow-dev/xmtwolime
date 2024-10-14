@@ -3,6 +3,9 @@
 
 #define __xmtwolime_h     1
 
+char *com_in  = (char *) 9999000;
+char *com_out = (char *) 9999872;
+
 /* какие-то константы */
 #define USERSPACE_START   8700000
 #define USERSPACE_END     9999999
