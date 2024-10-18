@@ -39,11 +39,6 @@ int main(int argc, char *argv[]) {
                 stack[stackptr] = stack[stackptr] % stack[stackptr + 1];
                 stackptr++;
                 break;
-            case '^':
-                stackptr -= 2;
-                stack[stackptr] = pow(stack[stackptr], stack[stackptr + 1]);
-                stackptr++;
-                break;
             
             case '?':
                 stack[stackptr++] = sel(10);
