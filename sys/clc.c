@@ -8,10 +8,15 @@ int stackptr = 0;
 int main(int argc, char *argv[]) {
     int base = 10;
     
-    if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x')
+    if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x') {
         base = 16;
-    else if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'o')
+        argv++;
+        argc--;
+    } else if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'o') {
         base = 8;
+        argv++;
+        argc--;
+    }
     
     memset(stack, '\0', sizeof(stack));
     
