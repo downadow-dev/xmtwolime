@@ -6,6 +6,13 @@ int stack[100];
 int stackptr = 0;
 
 int main(int argc, char *argv[]) {
+    int base = 10;
+    
+    if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x')
+        base = 16;
+    else if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'o')
+        base = 8;
+    
     memset(stack, '\0', sizeof(stack));
     
     for(int i = 1; i < argc; i++) {
@@ -52,10 +59,10 @@ int main(int argc, char *argv[]) {
     }
     
     if(stackptr > 0) {
-        printf("%d\n", stack[--stackptr]);
+        printf(base == 10 ? "%d\n" : (base == 16 ? "%X\n" : "%o\n"), stack[--stackptr]);
         exit(EXIT_SUCCESS);
     } else {
-        puts("usage: xtl clc <code>  (e.g. '2 4 +')");
+        puts("usage: xtl clc [-{x|o}] <code>  (e.g. '2 4 +')");
         exit(EXIT_FAILURE);
     }
 }

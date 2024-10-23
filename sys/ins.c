@@ -1,0 +1,28 @@
+#include <file.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <___get_args.h>
+
+int main(int argc, char *argv[]) {
+    if(argc < 3) {
+        puts("usage: xtl ins <file> <pos> [<n>]");
+        exit(EXIT_FAILURE);
+    }
+    
+    fd_t f = file(argv[1]);
+    if(f == NULL) {
+        puts("file opening error");
+        exit(2);
+    }
+    
+    int n = argc > 3 ? atoi(argv[3]) : 1;
+    char *p = filedata(f) + atoi(argv[2]);
+    while(n--) {
+        memmove(p + 62, p, strlen(p) + 1);
+        memset(p, ' ', 61);
+        *(p+61) = '\n';
+        p += 62;
+    }
+}
+
