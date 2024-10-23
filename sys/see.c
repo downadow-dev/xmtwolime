@@ -1,5 +1,7 @@
 #include <xmtwolime.h>
-#include <useful.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include <___get_args.h>
 
 int main(int argc, char *argv[]) {
@@ -42,7 +44,7 @@ int main(int argc, char *argv[]) {
                 }
                 
                 j++;
-            } else if(addr[i] == '\0' || addr[i] == EOT) {
+            } else if(addr[i] == '\0') {
                 break;
             } else {
                 printf("%c", addr[i]);

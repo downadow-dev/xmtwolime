@@ -1,4 +1,5 @@
-#include <useful.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <___get_args.h>
 
 int stack[100];

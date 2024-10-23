@@ -1,8 +1,9 @@
 /* сравнение двух файлов */
 
 
-#include <useful.h>
-#include <gets.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include <xmtwolime.h>
 #include <file.h>
 

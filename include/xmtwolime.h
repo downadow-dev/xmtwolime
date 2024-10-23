@@ -24,10 +24,5 @@ char *com_out = (char *) 9999872;
 #define YELLOW            7
 /**********************/
 
-#ifndef NULL
-#define NULL              ((void *) 0)
-#endif
-
-
 #endif
 #endif

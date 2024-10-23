@@ -3,8 +3,8 @@
 
 #include <xmtwolime.h>
 #include <___get_args.h>
-#include <useful.h>
-#include <gets.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
@@ -27,9 +27,7 @@ int main(int argc, char *argv[]) {
         
         /************************************/
         
-        gets(buf, sizeof(buf));
-        
-        if(buf[0] == EOT)
+        if(gets(buf, sizeof(buf)) == NULL)
             break;
         
         memset(&buf[strlen(buf)], ' ', sizeof(buf) - 1);

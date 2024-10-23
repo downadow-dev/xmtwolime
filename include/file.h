@@ -2,7 +2,7 @@
 #define __file_h    1
 
 #include <xmtwolime.h>
-#include <gets.h>
+#include <string.h>
 
 typedef char * fd_t;
 
@@ -21,7 +21,7 @@ fd_t file(char *name) {
         return NULL;
     
     for(int i = 0; i < MAX_FILES; i++)
-        if(strcmp(&__files[i * FILE_SIZE], name))
+        if(strcmp(&__files[i * FILE_SIZE], name) == 0)
             return &__files[i * FILE_SIZE];
     
     return NULL;

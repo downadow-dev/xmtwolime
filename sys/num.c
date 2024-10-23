@@ -1,6 +1,7 @@
 #include <xmtwolime.h>
 #include <file.h>
-#include <useful.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <___get_args.h>
 
 int main(int argc, char *argv[]) {

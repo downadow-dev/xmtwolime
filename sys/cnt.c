@@ -1,4 +1,5 @@
-#include <useful.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <xmtwolime.h>
 #include <file.h>
 

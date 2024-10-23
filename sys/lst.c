@@ -1,7 +1,7 @@
 /* вывести список файлов */
 
-#include <useful.h>
-#include <gets.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <file.h>
 
 int main(int argc, char *argv[]) {
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
                 memset(buf, '\0', sizeof buf);
                 memcpy(buf, name, strlen(argv[1]));
                 
-                if(strcmp(argv[1], buf))
+                if(strcmp(argv[1], buf) == 0)
                     printf("%s  ", name + strlen(buf));
                 
             } else continue;

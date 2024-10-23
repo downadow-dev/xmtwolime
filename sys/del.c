@@ -1,4 +1,5 @@
-#include <useful.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <xmtwolime.h>
 
 int main(int argc, char *argv[]) {

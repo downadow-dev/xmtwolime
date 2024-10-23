@@ -1,7 +1,8 @@
-#include <useful.h>
 #include <xmtwolime.h>
 #include <file.h>
 #include <___get_args.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
     if(argc < 3) {

@@ -22,7 +22,7 @@ echo 'int main(int argc, char *argv[]) {' >> sys/main.c
 echo '    if(argc < 2) exit(3);' >> sys/main.c
 
 for prog in sys/???.c; do
-    echo '    else if(strcmp(argv[1], "'`basename $prog .c`'")) ' "`basename $prog .c`" '(argc - 1, argv + 1);' >> sys/main.c
+    echo '    else if(strcmp(argv[1], "'`basename $prog .c`'") == 0) ' "`basename $prog .c`" '(argc - 1, argv + 1);' >> sys/main.c
 done
 
 echo '    else exit(3);' >> sys/main.c
