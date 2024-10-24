@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
     }
     
     char *name;
+    int n = 0;
     freset();
     while(name = fnext()) {
         if(name[0] == '.' && getuid() != UID_ROOT)
@@ -22,13 +23,17 @@ int main(int argc, char *argv[]) {
                 memset(buf, '\0', sizeof buf);
                 memcpy(buf, name, strlen(argv[1]));
                 
-                if(strcmp(argv[1], buf) == 0)
+                if(strcmp(argv[1], buf) == 0) {
                     printf("%s  ", name + strlen(buf));
+                    n++;
+                }
                 
             } else continue;
         } else {
             printf("%s  ", name);
+            n++;
         }
     }
+    printf("\n\n%d", n);
 }
 
