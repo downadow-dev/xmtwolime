@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl see [-n] <file>");
+        puts("usage: xtl see [-n] <file> [<position>]");
         exit(EXIT_FAILURE);
     }
     
@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
     if(argv[1][0] == '-' && argv[1][1] == 'n') {
         nflag = true;
         ++argv;
+        --argc;
     }
     
     fd_t f = file(argv[1]);
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    char *addr = filedata(f);
+    char *addr = filedata(f) + (argc > 2 ? atoi(argv[2]) : 0);
     char *start = addr;
     
     while(true) {
@@ -55,8 +56,15 @@ int main(int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         
         addr++;
-        while(addr[-1] != '\n' && addr[-1] != '\0')
+        
+        int n = 3;
+        while(n--) {
+            while(addr[-1] != '\n' && addr[-1] != '\0') {
+                addr++;
+            }
             addr++;
+        }
+        addr--;
     }
 }
 

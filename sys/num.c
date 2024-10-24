@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl num <file>");
+        puts("usage: xtl num <file> [<position>]");
         exit(EXIT_FAILURE);
     }
     
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    char *addr = filedata(f);
+    char *addr = filedata(f) + (argc > 2 ? atoi(argv[2]) : 0);
     
     while(true) {
         clear_output();
