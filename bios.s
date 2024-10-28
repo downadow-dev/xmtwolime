@@ -370,22 +370,79 @@ bios_codeStart:
 			mov UR15, 0
 			if UR16 == UR13 && UR17 == UR14, UR15
 			
+			mov UR14, 'g'
+			mov2 UR15, <bios_downloadMode_loop_get>
+			if UR16 == UR13 && UR17 == UR14, UR15
+			
 			;;;;;;;;;;;;;;;;;;;;;;;;
 			
 			mov2 UR28, <bios_downloadMode_loop>
 			jmp UR28
+			
+			bios_downloadMode_loop_get:
+		        ;;; получение адреса ячейки памяти
+				
+				mov UR20, 48
+				
+				ild 9999885, UR13
+				sub UR13 UR20, UR13
+				
+				ild 9999886, UR14
+				sub UR14 UR20, UR14
+				
+				ild 9999887, UR15
+				sub UR15 UR20, UR15
+				
+				ild 9999888, UR16
+				sub UR16 UR20, UR16
+				
+				ild 9999889, UR17
+				sub UR17 UR20, UR17
+				
+				ild 9999890, UR18
+				sub UR18 UR20, UR18
+				
+				ild 9999891, UR19
+				sub UR19 UR20, UR19
+				
+				mov3 UR12, UR14 UR15 UR16 UR17 UR18 UR19
+				mov2 UR14, 1000000
+				mul UR14 UR13, UR13
+				add UR12 UR13, UR12
+				
+				;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+				
+				mov2 UR19, 9999005
+				
+				ild UR12, UR20
+				isv UR20, UR19
+				inc UR12
+				inc UR19
+				
+				ild UR12, UR20
+				isv UR20, UR19
+				inc UR12
+				inc UR19
+				
+				ild UR12, UR20
+				isv UR20, UR19
+				inc UR12
+				inc UR19
+				
+				ild UR12, UR20
+				isv UR20, UR19
+				inc UR12
+				inc UR19
+				
+				mov2 UR20, <bios_downloadMode_loop>
+				jmp UR20
 			
 			bios_downloadMode_loop_flash:
 				mov UR1, 0
 				mov UR29, 0
 				isv UR29, 9999872
 				isv UR29, 9999881
-				
-				mov UR16, 1
-				;; смена цвета ячеек видеопамяти на белый
-				vsv UR16, 1999
-				updd
-				
+
 				;;; получение адреса ячейки памяти
 				
 				mov UR20, 48
@@ -479,12 +536,7 @@ bios_codeStart:
 				mov UR29, 0
 				isv UR29, 9999872
 				isv UR29, 9999881
-				
-				mov UR16, 1
-				;; смена цвета ячеек видеопамяти на белый
-				vsv UR16, 1999
-				updd
-				
+
 				;;; получение адреса ячейки памяти
 				
 				mov UR20, 48
@@ -578,12 +630,7 @@ bios_codeStart:
 				mov UR29, 0
 				isv UR29, 9999872
 				isv UR29, 9999881
-				
-				mov UR16, 1
-				;; смена цвета ячеек видеопамяти на белый
-				vsv UR16, 1999
-				updd
-				
+
 				;;; получение адреса ячейки памяти
 				
 				mov UR20, 48
