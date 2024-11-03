@@ -17,7 +17,7 @@ char *__files = USERSPACE_START;
 
 /* получение адреса файла */
 fd_t file(char *name) {
-    if(*name == '.' && getuid() != UID_ROOT)
+    if(*name == '\0' || (*name == '.' && getuid() != UID_ROOT))
         return NULL;
     
     for(int i = 0; i < MAX_FILES; i++)
