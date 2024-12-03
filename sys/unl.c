@@ -7,7 +7,7 @@
 #include <file.h>
 
 int main(int argc, char *argv[]) {
-    if(argc < 3) {
+    if(argc < 2) {
         puts("usage: xtl unl <archive file> [<out files prefix>]");
         exit(EXIT_FAILURE);
     }
