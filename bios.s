@@ -31,7 +31,7 @@ bios_codeStart:
 	vsv UR0, 1999
 	
 	vrst
-	vstr 0000, "iiixmish2 BIOS by downadow, 2024"
+	vstr 0000, "iiixmish2 BIOS by downadow, 2024-2025"
 	updd
 	ild <bios_password>, UR0
 	mov UR6, 1
@@ -176,10 +176,14 @@ bios_codeStart:
 		vstr 0126, " [q]   set new password / reset"
 		vstr 0189, " [e]   enter downloadMode"
 		vstr 0252, " [ws]  change delay:"
-		vstr 0315, " [ESC] reboot"
+		vstr 0315, " [t]   reset clock:"
+		vstr 0378, " [ESC] reboot"
 		
 		ild <bios_delay>, UR0
 		vsvan UR0, 0274
+		
+		time UR0
+		vsvan UR0, 0337
 		
 		updd
 		
@@ -205,6 +209,10 @@ bios_codeStart:
 		
 		mov UR6, 's'
 		mov2 UR8, <bios_setup_delay-->
+		if UR1 == UR6, UR8
+		
+		mov UR6, 't'
+		mov2 UR8, <bios_setup_resetClock>
 		if UR1 == UR6, UR8
 		
 		mov UR6, 27
@@ -737,6 +745,12 @@ bios_codeStart:
 		
 		mov2 UR0, <bios_setup>
 		jmp UR0
+	
+	bios_setup_resetClock:
+	    trst
+	    
+	    mov2 UR0, <bios_setup>
+	    jmp UR0
 
 
 bios_end:

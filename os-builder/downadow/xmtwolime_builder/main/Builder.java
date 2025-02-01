@@ -1,5 +1,4 @@
 
-
 package downadow.xmtwolime_builder.main;
 
 import java.util.Scanner;
@@ -21,7 +20,7 @@ public class Builder {
 			Scanner sc = new Scanner(new File(args[0]));
 			while(sc.hasNextLine()) System.out.println(sc.nextLine());
 			sc.close();
-			System.out.println("\n.orig 65536");
+			System.out.println("\n.orig 4096");
 			sc = new Scanner(new File(args[1]));
 			while(sc.hasNextLine()) System.out.println(sc.nextLine());
 			sc.close();
