@@ -276,7 +276,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(s);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 7);
+                sprintf(tmpbuf, "%d", app + i + 7);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -301,7 +301,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(s);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 7);
+                sprintf(tmpbuf, "%d", app + i + 7);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -328,7 +328,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(last);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 8);
+                sprintf(tmpbuf, "%d", app + i + 8);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -354,7 +354,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(last);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 8);
+                sprintf(tmpbuf, "%d", app + i + 8);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -380,7 +380,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(last);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 8);
+                sprintf(tmpbuf, "%d", app + i + 8);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
