@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 2) {
         puts("usage: xtl txt <file> [<position>]");
         exit(EXIT_FAILURE);

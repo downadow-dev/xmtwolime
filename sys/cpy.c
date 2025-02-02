@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 3) {
         puts("usage: xtl cpy <file_src> <file_dst>");
         exit(EXIT_FAILURE);

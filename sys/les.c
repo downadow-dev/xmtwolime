@@ -6,7 +6,7 @@
 #include <___get_args.h>
 #include <file.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 3) {
         puts("usage: xtl les <in file>... <out file>");
         exit(EXIT_FAILURE);

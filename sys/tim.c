@@ -5,7 +5,7 @@
 #include <___get_args.h>
 #include <xmtwolime.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 3) {
         puts("usage: xtl tim <minutes> <seconds>");
         exit(EXIT_FAILURE);

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <___get_args.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 3) {
         puts("usage: xtl ins <file> <pos> [<n>]");
         exit(EXIT_FAILURE);

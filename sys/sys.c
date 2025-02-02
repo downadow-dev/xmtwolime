@@ -3,7 +3,7 @@
 #include <file.h>
 #include <limits.h>
 
-int main(void) {
+void main(void) {
     printf("\
 CHAR_BIT     %d\n\
 MAX_PATH     %d\n\

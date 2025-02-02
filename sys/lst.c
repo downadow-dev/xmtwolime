@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <file.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc > 1 && argv[1][0] == '-') {
         puts("usage: xtl lst [<prefix>]");
         exit(EXIT_FAILURE);

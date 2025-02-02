@@ -7,7 +7,7 @@
 #include <xmtwolime.h>
 #include <file.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 3) {
         puts("usage: xtl cmp <file1> <file2>");
         exit(EXIT_FAILURE);

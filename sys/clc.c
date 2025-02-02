@@ -5,7 +5,7 @@
 int stack[100];
 int stackptr = 0;
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     int base = 10;
     
     if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x') {

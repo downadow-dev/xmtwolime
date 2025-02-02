@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 4) {
         puts("usage: xtl bed <file> <start> <value>...");
         exit(EXIT_FAILURE);

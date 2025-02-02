@@ -6,7 +6,7 @@
 #include <___get_args.h>
 #include <file.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 2) {
         puts("usage: xtl unl <archive file> [<out files prefix>]");
         exit(EXIT_FAILURE);

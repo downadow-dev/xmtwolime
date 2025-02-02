@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <xmtwolime.h>
 
-int main(int argc, char *argv[]) {
+void main(int argc, char *argv[]) {
     if(argc < 2) {
         puts("usage: xtl del <file>...");
         exit(EXIT_FAILURE);
