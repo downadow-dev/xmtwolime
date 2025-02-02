@@ -38,7 +38,6 @@ void main(int argc, char **argv) {
     }
     char *app = filedata(f);
     memset(app, '\0', FILESIZE);
-    app[1] = 'X', app[2] = 'M', app[3] = '2'; // обязательная директива iiixmish2-программ
     
     labels = ALLOC(sizeof(struct as_entry));
     labels->next = NULL;
@@ -168,7 +167,7 @@ void main(int argc, char **argv) {
     
     fp = data;
     // перевод программы в машинный код
-    for(int i = 4; ;) {
+    for(int i = 0; ;) {
         char *tmpp = strsep(&fp, "\n");
         if(!tmpp) break;
         strcpy(buf, tmpp);
@@ -277,7 +276,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(s);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 3);
+                sprintf(tmpbuf, "%d", i + 7);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -302,7 +301,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(s);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 3);
+                sprintf(tmpbuf, "%d", i + 7);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -329,7 +328,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(last);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 4);
+                sprintf(tmpbuf, "%d", i + 8);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -355,7 +354,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(last);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 4);
+                sprintf(tmpbuf, "%d", i + 8);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -381,7 +380,7 @@ void main(int argc, char **argv) {
                 app[i++] = atoi(last);
                 char tmpbuf[8];
                 sprintf(tmp, "0000000");
-                sprintf(tmpbuf, "%d", i + 4);
+                sprintf(tmpbuf, "%d", i + 8);
                 sprintf(tmp + (7 - strlen(tmpbuf)), "%s", tmpbuf);
                 for(int j = 6; j > 1; j--) {
                     app[i++] = tmp[j] - '0';
@@ -571,13 +570,13 @@ void main(int argc, char **argv) {
             *p++ = '\0';
             *p++ = '\0';
             *strchr(p, '"') = '\0';
-            int j = atoi(s) + 4;
+            int j = atoi(s);
             while(*p) app[j++] = *p++;
             app[j] = '\0';
         }
         else if(strcmp(instr, ".goto") == 0) i += atoi(s);
         else if(strcmp(instr, ".orig") == 0) {
-            int new = atoi(s) + 4;
+            int new = atoi(s);
             if(i > new) printf(".orig: warning: possible overflow\n");
             i = new;
         }
