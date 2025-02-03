@@ -81,7 +81,7 @@ int rename(char *oldname, char *newname) {
 int __nextfile_count = 0;
 
 char *fnext(void) {
-    while(__files[__nextfile_count * FILE_SIZE] == '\0' && __nextfile_count < MAX_FILES)
+    while((__files[__nextfile_count * FILE_SIZE] == '\0' || ((__files[__nextfile_count * FILE_SIZE] == '.' || __files[__nextfile_count * FILE_SIZE] == '~') && getuid() != UID_ROOT)) && __nextfile_count < MAX_FILES)
         __nextfile_count++;
     
     if(__nextfile_count >= MAX_FILES)
@@ -95,3 +95,4 @@ void freset(void) {
 }
 
 #endif
+

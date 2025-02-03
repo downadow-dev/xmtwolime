@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <file.h>
+#include <string.h>
 
 void main(int argc, char *argv[]) {
     if(argc > 1 && argv[1][0] == '-') {
@@ -14,9 +15,6 @@ void main(int argc, char *argv[]) {
     int n = 0;
     freset();
     while(name = fnext()) {
-        if(name[0] == '.' && getuid() != UID_ROOT)
-            continue;
-        
         if(argc > 1) {
             if(strlen(name) > strlen(argv[1])) {
                 char buf[MAX_PATH];

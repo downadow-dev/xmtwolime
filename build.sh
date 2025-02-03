@@ -46,7 +46,7 @@ python3 $xmconcc_path/xmconcc.py . xtl $xmconcc_path/tmp.xcc > software/xtl_sys.
 rm -f $xmconcc_path/tmp.xcc *tab.py
 
 # сборка библиотеки XmConC
-cat xmconc-lib/main.s xmconc-lib/main/*.s xmconc-lib/thread1/*.s > software/LIB_sys.s
+cat xmconc-lib/main.s xmconc-lib/main/*.s > software/LIB_sys.s
 
 cd os-builder
 javac downadow/xmtwolime_builder/main/Builder.java
