@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-void main(void) {
+void main(int argc, char *argv[]) {
     char *s;
     
     for(s = (char *) __extern_label("system_apps"); *s; s++) {

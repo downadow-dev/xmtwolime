@@ -9,7 +9,7 @@ typedef char * fd_t;
 #define MAX_PATH     63
 #define FILE_SIZE    10000
 #define FILESIZE     9937
-#define MAX_FILES    129
+#define MAX_FILES    128
 
 char *__files = USERSPACE_START;
 
@@ -20,9 +20,15 @@ fd_t file(char *name) {
     if(*name == '\0' || (*name == '.' && getuid() != UID_ROOT))
         return NULL;
     
-    for(int i = 0; i < MAX_FILES; i++)
+    for(int i = 0; i < MAX_FILES; i++) {
         if(strcmp(&__files[i * FILE_SIZE], name) == 0)
             return &__files[i * FILE_SIZE];
+        
+        if(strlen(&__files[i * FILE_SIZE]) > 2 && __files[i * FILE_SIZE + strlen(&__files[i * FILE_SIZE]) - 2] == '@') {
+            i += __files[i * FILE_SIZE + strlen(&__files[i * FILE_SIZE]) - 1] - '0';
+            continue;
+        }
+    }
     
     return NULL;
 }
@@ -30,6 +36,10 @@ fd_t file(char *name) {
 /* создание файла */
 fd_t creat(char *name) {
     fd_t fd;
+    
+    int n = 0;
+    if(strlen(name) > 2 && name[strlen(name) - 2] == '@')
+        n = name[strlen(name) - 1] - '0';
     
     if(*name == '.' && getuid() != UID_ROOT)
         return NULL;
@@ -39,10 +49,20 @@ fd_t creat(char *name) {
     
     for(int i = 0; i < MAX_FILES; i++) {
         if(__files[i * FILE_SIZE] == '\0') {
+            if(n > 0) {
+                for(int j = i + 1; j < i + 1 + n; j++)
+                    if(__files[j * FILE_SIZE] != '\0')
+                        goto next;
+            }
             memcpy(&__files[i * FILE_SIZE], name, strlen(name) + 1);
             memset(&__files[i * FILE_SIZE] + MAX_PATH, '\0', FILESIZE);
             return &__files[i * FILE_SIZE];
+        } else if(strlen(&__files[i * FILE_SIZE]) > 2 && __files[i * FILE_SIZE + strlen(&__files[i * FILE_SIZE]) - 2] == '@') {
+            i += __files[i * FILE_SIZE + strlen(&__files[i * FILE_SIZE]) - 1] - '0';
+            continue;
         }
+        
+        next: ;
     }
     
     return NULL;
@@ -81,6 +101,9 @@ int rename(char *oldname, char *newname) {
 int __nextfile_count = 0;
 
 char *fnext(void) {
+    if(__nextfile_count > 0 && strlen(&__files[(__nextfile_count - 1) * FILE_SIZE]) > 2 && __files[(__nextfile_count - 1) * FILE_SIZE + strlen(&__files[(__nextfile_count - 1) * FILE_SIZE]) - 2] == '@')
+        __nextfile_count += __files[(__nextfile_count - 1) * FILE_SIZE + strlen(&__files[(__nextfile_count - 1) * FILE_SIZE]) - 1] - '0';
+    
     while((__files[__nextfile_count * FILE_SIZE] == '\0' || ((__files[__nextfile_count * FILE_SIZE] == '.' || __files[__nextfile_count * FILE_SIZE] == '~') && getuid() != UID_ROOT)) && __nextfile_count < MAX_FILES)
         __nextfile_count++;
     
