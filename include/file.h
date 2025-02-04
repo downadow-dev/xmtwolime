@@ -76,6 +76,11 @@ int unlink(char *name) {
         return -1;
     
     if(fd = file(name)) {
+        if(strlen(name) > 2 && name[strlen(name) - 2] == '@') {
+            for(int i = 1; i < name[strlen(name) - 1] - '0' + 1; i++)
+                memset(fd + FILE_SIZE * i, '\0', FILE_SIZE);
+        }
+        
         *fd = '\0';
         return 0;
     } else {
