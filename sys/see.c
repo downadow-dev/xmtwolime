@@ -57,7 +57,7 @@ void main(int argc, char *argv[]) {
         
         addr++;
         
-        int n = 3;
+        int n = 20;
         while(n--) {
             while(addr[-1] != '\n' && addr[-1] != '\0') {
                 addr++;

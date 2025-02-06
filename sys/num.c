@@ -28,7 +28,7 @@ void main(int argc, char *argv[]) {
         if(getchar() == 'q')
             exit(EXIT_SUCCESS);
         
-        addr += 4;
+        addr += 25;
     }
 }
 
