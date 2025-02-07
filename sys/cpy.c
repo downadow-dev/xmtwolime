@@ -17,6 +17,8 @@ void main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    memcpy(filedata(fdst), filedata(fsrc), FILESIZE);
+    memcpy(filedata(fdst), filedata(fsrc), FILE_SIZE
+        * (1 + ((strlen(argv[2]) > 2 && argv[2][strlen(argv[2]) - 2] == '@') ?
+            argv[2][strlen(argv[2]) - 1] - '0' : 0)) - MAX_PATH);
 }
 
