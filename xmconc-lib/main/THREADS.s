@@ -19,7 +19,7 @@ __0___next_thread:
     ild %R_FA_0%, %R_FA_2%
     
     mov %R_FA_0%, 1
-    neg %R_FA_0%
+    tnp %R_FA_0%
     mov2 %R_FA_3%, <LIB___next_thread_0>
     if %R_FA_1% != %R_FA_0%, %R_FA_3%
     
@@ -73,7 +73,7 @@ __0_destroy_thread:
     add %R_FA_4% %R_FA_3%, %R_FA_3%
     
     mov %R_FA_0%, 1
-    neg %R_FA_0%
+    tnp %R_FA_0%
     isv %R_FA_0%, %R_FA_3%
     
     mov %R_FA_7%, 0
