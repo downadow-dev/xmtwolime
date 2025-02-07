@@ -4,13 +4,13 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 4) {
-        puts("usage: xtl bed <file> <start> <value>...");
+        puts("usage: xtl put <file> <start> <value>...");
         exit(EXIT_FAILURE);
     }
     
     fd_t f = creat(argv[1]);
     if(f == NULL) {
-        puts("bed: file opening error");
+        puts("put: file opening error");
         exit(EXIT_FAILURE);
     }
     

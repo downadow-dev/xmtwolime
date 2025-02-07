@@ -40,7 +40,7 @@ __0_this_thread:
     inc %R_FA_9%
     jmp %R_FA_8%
 
-__0_set_thread:
+__0_create_thread:
     dec %R_FA_9%
     ild %R_FA_9%, %R_FA_1%
     dec %R_FA_9%
