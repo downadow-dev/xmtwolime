@@ -14,7 +14,7 @@ void main(int argc, char *argv[]) {
     
     fd_t f = creat(argv[1]);
     if(f == NULL) {
-        puts("txt: file opening error");
+        puts("txt: file creating/opening error");
         exit(EXIT_FAILURE);
     }
     

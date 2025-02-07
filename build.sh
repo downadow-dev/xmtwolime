@@ -31,7 +31,6 @@ echo -n '        puts("' >> sys/main.c
 for prog in sys/???.c; do
     echo -n "`basename $prog .c` " >> sys/main.c
 done
-echo -n "`basename $prog .c` " >> sys/main.c
 echo '");' >> sys/main.c
 echo '        exit(3);' >> sys/main.c
 echo '    }' >> sys/main.c

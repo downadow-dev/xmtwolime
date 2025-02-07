@@ -19,10 +19,10 @@ void main(int argc, char *argv[]) {
     int n = argc > 3 ? atoi(argv[3]) : 1;
     char *p = filedata(f) + atoi(argv[2]);
     while(n--) {
-        memmove(p + 62, p, strlen(p) + 1);
-        memset(p, ' ', 61);
-        *(p+61) = '\n';
-        p += 62;
+        memmove(p + 63, p, strlen(p) + 1);
+        memset(p, ' ', 62);
+        *(p+62) = '\n';
+        p += 63;
     }
 }
 

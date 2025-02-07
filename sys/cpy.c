@@ -13,7 +13,7 @@ void main(int argc, char *argv[]) {
     fd_t fsrc = file (argv[1]);
     fd_t fdst = creat(argv[2]);
     if(fsrc == NULL || fdst == NULL) {
-        puts("cpy: file opening error");
+        puts("cpy: file creating/opening error");
         exit(EXIT_FAILURE);
     }
     
