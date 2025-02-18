@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <___get_args.h>
 
-int stack[100];
-int stackptr = 0;
-
 void main(int argc, char *argv[]) {
     int base = 10;
+    int stack[100];
+    int stackptr = 0;
     
     if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x') {
         base = 16;
@@ -51,10 +50,6 @@ void main(int argc, char *argv[]) {
                 stackptr -= 2;
                 stack[stackptr] = stack[stackptr] % stack[stackptr + 1];
                 stackptr++;
-                break;
-            
-            case '?':
-                stack[stackptr++] = sel(10);
                 break;
             
             /* число */
