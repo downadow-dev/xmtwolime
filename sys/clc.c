@@ -62,7 +62,7 @@ void main(int argc, char *argv[]) {
         printf(base == 10 ? "%d\n" : (base == 16 ? "%X\n" : "%o\n"), stack[--stackptr]);
         exit(EXIT_SUCCESS);
     } else {
-        puts("usage: xtl clc [-{x|o}] <code>  (e.g. '2 4 +')");
+        puts("usage: xtl clc [-{x|o}] CODE  (e.g. '2 4 +')");
         exit(EXIT_FAILURE);
     }
 }

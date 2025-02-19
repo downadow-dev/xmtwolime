@@ -4,7 +4,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 4) {
-        puts("usage: xtl put <file> <start> <value>...");
+        puts("usage: xtl put FILE START VALUE...");
         exit(EXIT_FAILURE);
     }
     
@@ -17,6 +17,6 @@ void main(int argc, char *argv[]) {
     char *p = filedata(f) + atoi(argv[2]);
     
     for(int i = 3; i < argc; i++, p++)
-        *p = atoi(argv[i]);
+        *p = strtol(argv[i], NULL, 0);
 }
 

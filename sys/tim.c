@@ -7,7 +7,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 3) {
-        puts("usage: xtl tim <minutes> <seconds>");
+        puts("usage: xtl tim MIN SEC");
         exit(EXIT_FAILURE);
     }
     

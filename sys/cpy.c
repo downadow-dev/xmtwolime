@@ -6,7 +6,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 3) {
-        puts("usage: xtl cpy <file_src> <file_dst>");
+        puts("usage: xtl cpy SRC DST");
         exit(EXIT_FAILURE);
     }
     

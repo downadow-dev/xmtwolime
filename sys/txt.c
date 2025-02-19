@@ -8,7 +8,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl txt <file> [<position>]");
+        puts("usage: xtl txt FILE [POS]");
         exit(EXIT_FAILURE);
     }
     

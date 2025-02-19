@@ -8,7 +8,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 3) {
-        puts("usage: xtl les <in file>... <out file>");
+        puts("usage: xtl les FILE... OUT_FILE");
         exit(EXIT_FAILURE);
     }
     

@@ -6,7 +6,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl see [-n] <file> [<position>]");
+        puts("usage: xtl see [-n] FILE [POS]");
         exit(EXIT_FAILURE);
     }
     

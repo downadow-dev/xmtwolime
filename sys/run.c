@@ -7,7 +7,7 @@
 
 void main(int argc, char **argv) {
     if(argc < 2) {
-        printf("usage: xtl run <file>");
+        printf("usage: xtl run FILE");
         exit(EXIT_FAILURE);
     } else if(getuid() != UID_ROOT) {
         printf("root required");

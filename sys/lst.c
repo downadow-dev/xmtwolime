@@ -7,7 +7,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc > 1 && argv[1][0] == '-') {
-        puts("usage: xtl lst [<prefix>]");
+        puts("usage: xtl lst [PREFIX]");
         exit(EXIT_FAILURE);
     }
     

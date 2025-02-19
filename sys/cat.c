@@ -8,7 +8,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 3) {
-        puts("usage: cat <file>... <out file>");
+        puts("usage: cat FILE... OUT_FILE");
         exit(EXIT_FAILURE);
     }
     

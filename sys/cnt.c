@@ -5,7 +5,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl cnt <file>...");
+        puts("usage: xtl cnt FILE...");
         exit(EXIT_FAILURE);
     }
     

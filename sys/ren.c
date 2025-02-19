@@ -6,7 +6,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 3) {
-        puts("usage: xtl ren <old name> <new name>");
+        puts("usage: xtl ren FILE NEW_NAME");
         exit(EXIT_FAILURE);
     }
     

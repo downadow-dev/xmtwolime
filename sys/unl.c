@@ -8,7 +8,7 @@
 
 void main(int argc, char *argv[]) {
     if(argc < 2) {
-        puts("usage: xtl unl <archive file> [<out files prefix>]");
+        puts("usage: xtl unl ARCHIVE [PREFIX]");
         exit(EXIT_FAILURE);
     }
     
