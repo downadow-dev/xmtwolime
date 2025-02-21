@@ -9,19 +9,15 @@ public class Builder {
 		if(args.length == 0 || args[0].equals("--help")) {
 			/* напечатать help-сообщение и завершиться */
 			System.out.println("Использование: java downadow.xmtwolime_builder.main.Builder [--help]\n"
-				+ "                    ПУТЬ_К_БИОСУ ПУТЬ_К_ЯДРУ ПРИЛОЖЕНИЕ…\n");
+				+ "                    ПУТЬ_К_ЯДРУ ПРИЛОЖЕНИЕ…\n");
 			System.exit(1);
 		}
 		
 		String apps_str = "";
 		try {
 			
-			/* сначала выводим текст БИОСа и ядра */
+			/* сначала выводим текст ядра */
 			Scanner sc = new Scanner(new File(args[0]));
-			while(sc.hasNextLine()) System.out.println(sc.nextLine());
-			sc.close();
-			System.out.println("\n.orig 4096");
-			sc = new Scanner(new File(args[1]));
 			while(sc.hasNextLine()) System.out.println(sc.nextLine());
 			sc.close();
 			
@@ -31,10 +27,9 @@ public class Builder {
 			
 			System.out.println("\t\t\t\tvsv %R_ZERO%, UR15");
 			System.out.println("\t\t\t\tupdd");
-			/* а после уже текст проверки "что за программа, которую хотел
-			   запустить пользователь?"                                    */
+			/* а после уже текст проверки */
 			int ii = 0;
-			for(int i = 2; i < args.length; i++) {
+			for(int i = 1; i < args.length; i++) {
 				char[] filename = args[i].split("/")[args[i].split("/").length - 1].toCharArray();
 				
 				System.out.println("\t\t\t\t_appChecking" + ii + ":");
@@ -71,7 +66,7 @@ public class Builder {
 			System.out.println();
 			
 			/* печатать исходные коды приложений */
-			for(int i = 2; i < args.length; i++) {
+			for(int i = 1; i < args.length; i++) {
 				sc = new Scanner(new File(args[i]));
 				while(sc.hasNextLine()) System.out.println(sc.nextLine());
 				sc.close();

@@ -1,6 +1,5 @@
 #include <xmtwolime.h>
 #include <file.h>
-#include <___get_args.h>
 #include <stdlib.h>
 #include <stdio.h>
 

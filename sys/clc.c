@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <___get_args.h>
 
 void main(int argc, char *argv[]) {
     int base = 10;

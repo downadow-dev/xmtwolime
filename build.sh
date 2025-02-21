@@ -39,7 +39,7 @@ echo '}' >> sys/main.c
 
 #####################################################
 
-python3 $ctoxmconc_path/c2xcc.py sys/main.c "-I$ctoxmconc_path/include -Iinclude" > $xmconcc_path/tmp.xcc
+python3 $ctoxmconc_path/c2xcc.py sys/main.c "-I$ctoxmconc_path/include -Iinclude -include $ctoxmconc_path/include/___get_args.h" > $xmconcc_path/tmp.xcc
 python3 $xmconcc_path/xmconcc.py . xtl $xmconcc_path/tmp.xcc > software/xtl_sys.s
 
 rm -f $xmconcc_path/tmp.xcc *tab.py
@@ -50,7 +50,7 @@ cat xmconc-lib/main.s xmconc-lib/main/*.s > software/LIB_sys.s
 cd os-builder
 javac downadow/xmtwolime_builder/main/Builder.java
 cd ../software
-java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../bios.s ../kernel.s $(ls) > ../image
+java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../kernel.s $(ls) > ../image
 cd ..
 $assembler image image
 rm software/*_sys.s

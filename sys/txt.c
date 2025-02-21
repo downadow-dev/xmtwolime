@@ -2,7 +2,6 @@
 
 
 #include <xmtwolime.h>
-#include <___get_args.h>
 #include <stdlib.h>
 #include <stdio.h>
 

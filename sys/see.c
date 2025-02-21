@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <___get_args.h>
 
 void main(int argc, char *argv[]) {
     if(argc < 2) {

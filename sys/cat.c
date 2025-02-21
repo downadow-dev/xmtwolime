@@ -1,7 +1,6 @@
 /* "склеить" текстовые файлы */
 
 #include <stdio.h>
-#include <___get_args.h>
 #include <stdlib.h>
 #include <string.h>
 #include <file.h>
