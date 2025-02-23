@@ -24,36 +24,36 @@ void main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         
         switch(argv[i][0]) {
-            /* операции */
-            case '+':
-                stackptr -= 2;
-                stack[stackptr] = stack[stackptr] + stack[stackptr + 1];
-                stackptr++;
-                break;
-            case '-':
-                stackptr -= 2;
-                stack[stackptr] = stack[stackptr] - stack[stackptr + 1];
-                stackptr++;
-                break;
-            case '*':
-                stackptr -= 2;
-                stack[stackptr] = stack[stackptr] * stack[stackptr + 1];
-                stackptr++;
-                break;
-            case '/':
-                stackptr -= 2;
-                stack[stackptr] = stack[stackptr] / stack[stackptr + 1];
-                stackptr++;
-                break;
-            case '%':
-                stackptr -= 2;
-                stack[stackptr] = stack[stackptr] % stack[stackptr + 1];
-                stackptr++;
-                break;
-            
-            /* число */
-            default:
-                stack[stackptr++] = atoi(argv[i]);
+        /* операции */
+        case '+':
+            stackptr -= 2;
+            stack[stackptr] = stack[stackptr] + stack[stackptr + 1];
+            stackptr++;
+            break;
+        case '-':
+            stackptr -= 2;
+            stack[stackptr] = stack[stackptr] - stack[stackptr + 1];
+            stackptr++;
+            break;
+        case '*':
+            stackptr -= 2;
+            stack[stackptr] = stack[stackptr] * stack[stackptr + 1];
+            stackptr++;
+            break;
+        case '/':
+            stackptr -= 2;
+            stack[stackptr] = stack[stackptr] / stack[stackptr + 1];
+            stackptr++;
+            break;
+        case '%':
+            stackptr -= 2;
+            stack[stackptr] = stack[stackptr] % stack[stackptr + 1];
+            stackptr++;
+            break;
+        
+        /* число */
+        default:
+            stack[stackptr++] = atoi(argv[i]);
         }
     }
     
