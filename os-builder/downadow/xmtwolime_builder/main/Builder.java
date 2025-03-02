@@ -63,7 +63,8 @@ public class Builder {
 			System.out.println("\t\t\t\t\tmov2 UR17, <_term_input>");
 			System.out.println("\t\t\t\t\tjmp UR17");
 			
-			System.out.println();
+			/* конец кода ядра */
+			System.out.println(".orig 65536");
 			
 			/* печатать исходные коды приложений */
 			for(int i = 1; i < args.length; i++) {
