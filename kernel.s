@@ -201,7 +201,6 @@ _main:
                 mov %R_KEY%, 0
                 jmp UR17
             
-        ;;; выводит код возврата приложения и ждёт клавишу
         .orig 32768
         _term_applicationCompleted:
             mov %R_ZERO%, 0
