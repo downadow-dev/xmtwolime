@@ -25,36 +25,5 @@
 #define RED               6
 #define YELLOW            7
 
-/* ioctl */
-#define DEV_PRINTER       1
-#define IO_PRINTER_INFO   1
-#define IO_PRINTER_WRITE  2
-#define IO_PRINTER_OFF    3
-
-int ioctl(char device, char request, char *argp, int argn, char *outp, int outn) {
-    memset((char *)9999000, 0, 100);
-    *((char *)9999001) = request;
-    if(argp) memcpy((char *)9999002, argp, argn);
-    *((char *)9999000) = device;
-    
-    int start = clock();
-    while(*((char *)9999872) == 0) {
-        if(clock() > start + 5 * CLOCKS_PER_SEC) {
-            *((char *)9999000) = 0;
-            return -130;
-        }
-    }
-    
-    char status = *((char *)9999872) - 1;
-    if(outp) memcpy(outp, (char *)9999873, outn);
-    *((char *)9999000) = 0;
-    while(*((char *)9999872) != 0) {
-        if(clock() > start + 5 * CLOCKS_PER_SEC) {
-            return -130;
-        }
-    }
-    return status;
-}
-
 #endif
 #endif
