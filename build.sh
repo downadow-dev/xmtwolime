@@ -50,7 +50,7 @@ cat xmconc-lib/main.s xmconc-lib/main/*.s > software/LIB_sys.s
 cd os-builder
 javac downadow/xmtwolime_builder/main/Builder.java
 cd ../software
-java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../kernel.s $(ls) > ../image
+java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../boot.s ../kernel.s $(ls) > ../image
 cd ..
 $assembler image image
 rm software/*_sys.s

@@ -1,4 +1,4 @@
-.orig 0
+kernel_start:
 
 ;; пользовательский регистр 29 хранит ID пользователя
 ;    0 — root (суперпользователь)
@@ -120,11 +120,13 @@ _main:
         
         mov2 UR17, <_no_ordinary>
         if %R_USER% == %R_ZERO%, UR17
-        vstr 0000, "$ "
+        mov UR17, '$'
+        vsv UR17, 0000
         mov2 UR17, <_ordinary>
         jmp UR17
         _no_ordinary:
-            vstr 0000, "# "
+            mov UR17, '#'
+            vsv UR17, 0000
         _ordinary:
             nop
         
@@ -145,7 +147,8 @@ _main:
             ;; если клавиша не была нажата, то перейти к `_term_input'
             if %R_KEY% == %R_ZERO%, UR17
             
-            vstr %OUT_ST%, "                 "
+            mov UR16, 0
+            vsv UR16, %OUT_ST%
             updd
             
             mov2 UR16, 0065535
@@ -214,7 +217,7 @@ _main:
             vsv %R_ZERO%, 1998
             
             mov %R_KEY%, 0
-            vsvan %R_RETURN_CODE%, 1822
+            isv %R_RETURN_CODE%, <lastReturnCode>
             updd
             
             mov2 UR17, <_term_applicationCompleted_keyWait>

@@ -9,15 +9,19 @@ public class Builder {
 		if(args.length == 0 || args[0].equals("--help")) {
 			/* напечатать help-сообщение и завершиться */
 			System.out.println("Использование: java downadow.xmtwolime_builder.main.Builder [--help]\n"
-				+ "                    ПУТЬ_К_ЯДРУ ПРИЛОЖЕНИЕ…\n");
+				+ "                    ПУТЬ_К_BOOT_S ПУТЬ_К_ЯДРУ ПРИЛОЖЕНИЕ…\n");
 			System.exit(1);
 		}
 		
 		String apps_str = "";
 		try {
 			
-			/* сначала выводим текст ядра */
+			/* сначала выводим текст boot и ядра */
 			Scanner sc = new Scanner(new File(args[0]));
+			while(sc.hasNextLine()) System.out.println(sc.nextLine());
+			sc.close();
+			
+			sc = new Scanner(new File(args[1]));
 			while(sc.hasNextLine()) System.out.println(sc.nextLine());
 			sc.close();
 			
@@ -29,7 +33,7 @@ public class Builder {
 			System.out.println("\t\t\t\tupdd");
 			/* а после уже текст проверки */
 			int ii = 0;
-			for(int i = 1; i < args.length; i++) {
+			for(int i = 2; i < args.length; i++) {
 				char[] filename = args[i].split("/")[args[i].split("/").length - 1].toCharArray();
 				
 				System.out.println("\t\t\t\t_appChecking" + ii + ":");
@@ -59,22 +63,25 @@ public class Builder {
 			}
 			/* напечатать код, который будет исполняться, если команда не найдена */
 			System.out.println("\t\t\t\t_appChecking" + ii + ":");
-			System.out.println("\t\t\t\t\tvstr %OUT_ST%, \"command not found\"");
+			System.out.println("\t\t\t\t\tmov UR17, '?'");
+			System.out.println("\t\t\t\t\tvsv UR17, %OUT_ST%");
 			System.out.println("\t\t\t\t\tmov2 UR17, <_term_input>");
 			System.out.println("\t\t\t\t\tjmp UR17");
 			
 			/* конец кода ядра */
 			System.out.println(".orig 65536");
+			System.out.println("lastReturnCode:");
+			System.out.println(".byte 0");
 			
 			/* печатать исходные коды приложений */
-			for(int i = 1; i < args.length; i++) {
+			for(int i = 2; i < args.length; i++) {
 				sc = new Scanner(new File(args[i]));
 				while(sc.hasNextLine()) System.out.println(sc.nextLine());
 				sc.close();
 			}
 			
 			System.out.println("system_apps:");
-			System.out.println(".goto +" + (apps_str.replace("<", "000").length() + 1));
+			System.out.println(".skip " + (apps_str.replace("<", "000").length() + 1));
 			System.out.println(".ascii <system_apps> \"" + apps_str.replace('"', '_') + "\"");
 			
 			System.out.println("system_appsEnd:");
