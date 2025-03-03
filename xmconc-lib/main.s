@@ -40,5 +40,7 @@ LIB:
 	mov %R_FA_1%, 'y'
 	vsv %R_FA_1%, %R_FA_0%
 	updd
-	%__END_THE_APP__%
+	
+	mov %R_RETURN_CODE%, 0
+	off
 

@@ -37,8 +37,6 @@ kernel_start:
 ;; ваших программ
 .def %R_RETURN_CODE% "UR6"
 
-.def %__END_THE_APP__% "jmp UR17"
-
 ;; адрес начала аргументов приложения в видеопамяти
 .def %ARGS_ST% "0006"
 
