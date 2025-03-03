@@ -216,6 +216,8 @@ _main:
             
             mov %R_KEY%, 0
             isv %R_RETURN_CODE%, <lastReturnCode>
+            mov UR17, '-'
+            vsv UR17, 1823
             updd
             
             mov2 UR17, <_term_applicationCompleted_keyWait>
