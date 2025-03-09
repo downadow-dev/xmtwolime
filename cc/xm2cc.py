@@ -564,7 +564,7 @@ def compile_obj(obj, root=False):
             variables += [current_function + '.' + obj.name]
             code += '/alloc ' + current_function + '.' + obj.name + '___ARRAY__[64]\n'
             code += '/define ' + current_function + '.' + obj.name + ' :{' \
-                + current_function + '.' + obj.name + '___ARRAY__} {__retptr}! +' + '\n'
+                + current_function + '.' + obj.name + '___ARRAY__} {__retptr}! +\n'
             if obj.init != None:
                 code += compile_obj(Assignment('=', ID(current_function + '.' + obj.name), obj.init), root=True) + '\n'
             
@@ -850,7 +850,7 @@ def compile_obj(obj, root=False):
             
             i = 0
             
-            code += '/alloc ___switchv' + str(saved) + '[32]\n'
+            code += '/alloc ___switchv' + str(saved) + '\n'
             code += compile_obj(obj.cond) + ' {___switchv' + str(saved) + '} =\n'
             
             for item in (obj.stmt.block_items if type(obj.stmt) == Compound else [obj.stmt]):
@@ -907,28 +907,14 @@ def compile_obj(obj, root=False):
 
 ###################################################################
 
-includes = []
-allocptr = 8700000
-defines = {}
-
-def reset_preprocess_vars():
-    global includes
-    global allocptr
-    global defines
-    
-    includes = []
-    allocptr = 8700000
-    defines = {}
-
 # обработать директивы в коде (XmConC)
 def preprocess(code):
     code = code.replace('\t', '').replace('\\\n', '').split('\n')
     
     result = ''
     
-    global includes
-    global allocptr
-    global defines
+    allocptr = 8700000
+    defines = {}
     
     for line in code:
         line = line.strip()

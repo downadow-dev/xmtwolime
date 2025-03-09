@@ -20,17 +20,17 @@ int getchar(void) {
 
 int putchar(int c) {
     switch(c) {
-        case '\n':
-            _call("newline");
-            break;
-        case '\b':
-            _call("backspace");
-            break;
-        case '\r':
-            _call("cr");
-            break;
-        default:
-            _call("putc", c);
+    case '\n':
+        _call("newline");
+        break;
+    case '\b':
+        _call("backspace");
+        break;
+    case '\r':
+        _call("cr");
+        break;
+    default:
+        _call("putc", c);
     }
     return c;
 }

@@ -47,9 +47,10 @@ cat lib/main.s lib/main/*.s > software/LIB_sys.s
 cd os-builder
 javac downadow/xmtwolime_builder/main/Builder.java
 cd ../software
-java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../boot.s ../kernel.s $(ls) > ../image
+java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../boot.s ../kernel.s * > ../image.s
 cd ..
-$assembler image image
+$assembler image.s image
+rm image.s
 rm software/*_sys.s
 rm sys/main.c
 
