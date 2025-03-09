@@ -2,8 +2,6 @@
 # автор            downadow (Sviatoslav)
 
 # ИЗМЕНИТЕ ЭТО
-ctoxmconc_path="../c-to-xmconc"
-xmconcc_path="../xmconcc"
 assembler='../mxm2c-as/mxm2c-as'
 ##############
 
@@ -39,13 +37,12 @@ echo '}' >> sys/main.c
 
 #####################################################
 
-python3 $ctoxmconc_path/c2xcc.py sys/main.c "-I$ctoxmconc_path/include -Iinclude -include $ctoxmconc_path/include/___get_args.h" > $xmconcc_path/tmp.xcc
-python3 $xmconcc_path/xmconcc.py . xtl $xmconcc_path/tmp.xcc > software/xtl_sys.s
+python3 cc/xm2cc.py xtl sys/main.c "-Icc/include -Iinclude -include cc/include/___get_args.h" > software/xtl_sys.s
 
-rm -f $xmconcc_path/tmp.xcc *tab.py
+rm -f *tab.py
 
 # сборка библиотеки XmConC
-cat xmconc-lib/main.s xmconc-lib/main/*.s > software/LIB_sys.s
+cat lib/main.s lib/main/*.s > software/LIB_sys.s
 
 cd os-builder
 javac downadow/xmtwolime_builder/main/Builder.java

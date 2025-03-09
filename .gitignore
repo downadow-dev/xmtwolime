@@ -2,3 +2,7 @@
 /os-builder/downadow/xmtwolime_builder/*/*.class
 /software/*
 /idt/idt
+/cc/*tab.py
+/cc/__pycache__
+/cc/*/__pycache__
+/cc/*/*/__pycache__
