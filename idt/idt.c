@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
     if(strcmp(argv[3], "flash") == 0) {
         FILE *fimg = xfopen(argv[4], "r");
         for(int i = strtol(argv[5], NULL, 0); i < end; i += 10) {
+            memset(command, 0, sizeof(command));
             command[0] = 'f';
             command[1] = i;
             for(int j = 0; j < 10; j++, total++) {
