@@ -40,7 +40,6 @@ int main(int argc, char **argv) {
     FILE *fcomm;
     FILE *fcomm2;
     int command[32];
-    char *p;
     int total = 0;
     int end = strtol(argv[6], NULL, 0);
     struct timespec slp = {.tv_sec = 0, .tv_nsec = strtol(argv[7], NULL, 0) * 1000000};
