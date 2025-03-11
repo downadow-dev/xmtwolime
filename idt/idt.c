@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
             }
             
             fcomm = xfopen(argv[1], "w");
-            for(int j = 0; j < 18; j++)
+            for(int j = 0; j < 12; j++)
                 write_int(command[j], fcomm);
             fclose(fcomm);
             
