@@ -4,3 +4,7 @@ __0_clock:
     inc %R_FA_9%
     jmp %R_FA_8%
 
+__0_clock_reset:
+    trst
+    jmp %R_FA_8%
+
