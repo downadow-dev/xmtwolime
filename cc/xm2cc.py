@@ -179,10 +179,17 @@ def compile_cond(op):
         return compile_obj(op) + ' 0 !?'
 
 def static_int(obj):
+    if type(obj) == Constant and (obj.type.startswith('unsigned') or obj.type.startswith('long')):
+        obj.type = 'int'
+    
+    obj.value = obj.value.lower().replace('u', '').replace('l', '')
+    
     if type(obj) == Constant and obj.type == 'int' and obj.value == '0':
         return 0
     elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0x'):
         return int(obj.value[2:], base=16)
+    elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0b'):
+        return int(obj.value[2:], base=2)
     elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0'):
         return int(obj.value[1:], base=8)
     elif type(obj) == Constant and obj.type == 'int':
@@ -616,6 +623,8 @@ def compile_obj(obj, root=False):
             return str(int(obj.value.lower().replace('l', '').replace('u', ''), base=0))
         elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and obj.value.startswith('0x') and not root:
             return str(int(obj.value[2:].lower().replace('l', '').replace('u', ''), base=16))
+        elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and obj.value.startswith('0b') and not root:
+            return str(int(obj.value[2:].lower().replace('l', '').replace('u', ''), base=2))
         elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and not root:
             return str(int(obj.value.lower().replace('l', '').replace('u', ''), base=8))
         # символ
