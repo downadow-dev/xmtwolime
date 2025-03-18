@@ -25,3 +25,6 @@ LIB:
 	mov %R_RETURN_CODE%, 0
 	off
 
+LIB_fail:
+	mov %R_RETURN_CODE%, 30
+	off

@@ -12,7 +12,8 @@ __0_memset:
     
 	mov %R_RETURN_CODE%, 30
 	mov2 %R_FA_3%, 6900000
-	if %R_FA_0% < %R_FA_3%, UR17
+	mov %R_FA_4%, <LIB_fail>
+	if %R_FA_0% < %R_FA_3%, %R_FA_4%
 	
     inc %R_FA_9%
     
