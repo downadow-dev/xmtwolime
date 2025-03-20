@@ -214,16 +214,16 @@ int printf(char *fmt, ...) {
 #define puts(s)  printf("%s\n", (s))
 
 char *gets(char *buf, int size) {
-    int i, c;
-    for(i = 0; i < (size - 1) && (c = getchar()) != '\n'; i++) {
+    int i = 0, c = 0;
+    printf("█\b");
+    while(i < (size - 1) && (c = getchar()) != '\n') {
         if(c == EOF) {
             buf[i] = '\0';
             return NULL;
         } else if(c != '\b') {
-            buf[i] = c;
-            printf("%c█\b", buf[i]);
+            printf("%c█\b", (buf[i++] = c));
         } else if(i > 0) {
-            i -= 2;
+            i--;
             printf(" \b\b█\b");
         }
     }
