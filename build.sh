@@ -18,20 +18,17 @@ for prog in sys/???.c; do
 done
 
 echo 'int main(int argc, char *argv[]) {' >> sys/main.c
-echo '    if(argc > 1 && strcmp(argv[1], "xtl") == 0) puts("xtl -- the basic Xmtwolime utilities");' >> sys/main.c
 
 for prog in sys/???.c; do
-    echo '    else if(strcmp(argv[1], "'`basename $prog .c`'") == 0) '`basename $prog .c`'_prog(argc - 1, argv + 1);' >> sys/main.c
+    echo '    if(strcmp(argv[1], "'`basename $prog .c`'") == 0) { '`basename $prog .c`'_prog(argc - 1, argv + 1); exit(EXIT_SUCCESS); }' >> sys/main.c
 done
 
-echo '    else {' >> sys/main.c
-echo -n '        puts("' >> sys/main.c
+echo -n '    puts("' >> sys/main.c
 for prog in sys/???.c; do
     echo -n "`basename $prog .c` " >> sys/main.c
 done
 echo '");' >> sys/main.c
-echo '        exit(3);' >> sys/main.c
-echo '    }' >> sys/main.c
+echo '    exit(3);' >> sys/main.c
 
 echo '}' >> sys/main.c
 
