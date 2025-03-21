@@ -5,7 +5,7 @@ int main(void) {
     clear_output();
     
     setcolor(GREEN);
-    printf("\n\n\n\n\n\n\n\n");
+    printf("\n\n\n\n\n");
     printf("  .  .  .  .  ...  .          .   ..   .     ...  .  .  ...\n"
            "   \\/   |\\/|   |    \\   /\\   /   /  \\  |      |   |\\/|  |..\n"
            "   /\\   |  |   |     \\ /  \\ /    \\  /  |      |   |  |  |\n"
