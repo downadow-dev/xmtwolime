@@ -1,11 +1,9 @@
 #!/bin/bash
-# автор            downadow (Sviatoslav)
-
-# ИЗМЕНИТЕ ЭТО
-assembler='../mxm2c-as/mxm2c-as'
-##############
+# автор            downadow
 
 #####################################################
+
+set -e
 
 mkdir -p software
 
@@ -35,19 +33,13 @@ echo '}' >> sys/main.c
 #####################################################
 
 python3 cc/xm2cc.py xtl sys/main.c "-Icc/include -Iinclude -include cc/include/___get_args.h" > software/xtl_sys.s
+rm sys/main.c
 
 rm -f *tab.py
 
 # сборка библиотеки XmConC
 cat lib/main.s lib/main/*.s > software/LIB_sys.s
 
-cd os-builder
-javac downadow/xmtwolime_builder/main/Builder.java
-cd ../software
-java -cp ../os-builder/ downadow.xmtwolime_builder.main.Builder ../boot.s ../kernel.s * > ../image.s
-cd ..
-$assembler image.s image
-rm image.s
+python3 os-builder/main.py boot.s kernel.s software/* > out.s
 rm software/*_sys.s
-rm sys/main.c
 

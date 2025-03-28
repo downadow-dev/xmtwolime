@@ -1,6 +1,5 @@
-/image
-/os-builder/downadow/xmtwolime_builder/*/*.class
-/software/*
+/out.s
+/os-builder/__pycache__
 /idt/idt
 /cc/*tab.py
 /cc/__pycache__

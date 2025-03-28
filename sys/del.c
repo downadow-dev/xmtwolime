@@ -1,3 +1,5 @@
+/* удаление файлов */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <xmtwolime.h>
@@ -8,8 +10,12 @@ void main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    for(int i = 1; i < argc; i++)
-        unlink(argv[i]);
+    int errors = 0;
     
+    for(int i = 1; i < argc; i++)
+        if(unlink(argv[i]) == -1)
+            printf("%d: %s: error\n", ++errors, argv[i]);
+    
+    exit(-errors);
 }
 

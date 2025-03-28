@@ -5,7 +5,7 @@ int main(void) {
     clear_output();
     
     setcolor(GREEN);
-    printf("\n\n\n\n\n");
+    printf("\n\n\n\n\n\n");
     printf("  .  .  .  .  ...  .          .   ..   .     ...  .  .  ...\n"
            "   \\/   |\\/|   |    \\   /\\   /   /  \\  |      |   |\\/|  |..\n"
            "   /\\   |  |   |     \\ /  \\ /    \\  /  |      |   |  |  |\n"
@@ -17,7 +17,7 @@ int main(void) {
     int length = strlen(stars);
     char tmp;
     
-    for(int i = 0; i < 375; i++, msleep(40)) {
+    for(int i = 0; i < 375; i++, msleep(30)) {
         tmp = stars[0];
         for(int j = 1; j < length; j++)
             stars[j - 1] = stars[j];
