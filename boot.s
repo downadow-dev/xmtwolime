@@ -3,9 +3,13 @@
 vrst
 updd
 
-mov UR1, 0
-mov UR0, 1
-slp UR0
+mov UR0, 1000
+mov UR8, <boot_sleep0>
+trst
+boot_sleep0:
+    nop
+    time UR6
+    if UR6 < UR0, UR8
 
 ; проверка на ESC
 mov UR0, 27
@@ -26,8 +30,7 @@ boot_downloadMode:
 	updd
 	
 	boot_downloadMode_loop:
-		mov UR29, 10
-		lslp UR29
+		nop
 		
 		;;; интерпретация команд
 		

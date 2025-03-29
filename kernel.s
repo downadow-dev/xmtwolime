@@ -134,10 +134,7 @@ _main:
         mov UR15, 2
         
         _term_input:
-            ;; для lslp
-            mov UR16, 30
-            ;; ждать 30 миллисекунд
-            lslp UR16
+            nop
             
             updd
             
@@ -176,8 +173,6 @@ _main:
             mov2 UR16, 0009608
             ;; сохранение '█' в конце строки
             vsv UR16, UR15
-            ;; для lslp
-            mov UR16, 30
             
             ;; пользовательский регистр 0 должен содержать только ноль
             mov %R_ZERO%, 0
@@ -220,10 +215,8 @@ _main:
             updd
             
             mov2 UR17, <_term_applicationCompleted_keyWait>
-            mov UR16, 50
-            
             _term_applicationCompleted_keyWait:
-                lslp UR16
+                nop
                 if %R_KEY% == %R_ZERO%, UR17
             
             mov %R_KEY%, 0
