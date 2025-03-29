@@ -259,7 +259,7 @@ def compile_obj(obj, root=False):
         if type(obj) == Typedef:
             typedefs[obj.name] = preprocess_typedefs(obj.type)
             return ''
-        elif obj == None or (type(obj) == Decl and 'extern' in obj.storage) or (type(obj) == Constant and root):
+        elif obj == None or (type(obj) == Decl and 'extern' in obj.storage and type(obj.type) != FuncDecl) or (type(obj) == Constant and root):
             return ''
         elif type(obj) == DoWhile and type(obj.cond) == Constant and obj.cond.type == 'int' and obj.cond.value == '0':
             return compile_obj(obj.stmt)
@@ -1079,18 +1079,29 @@ if __name__ == '__main__':
     from pycparser import parse_file
     
     if len(sys.argv) == 1:
-        print('usage: ./xm2cc.py PROG_NAME FILE ["CPP_ARGS"] [> OUT_FILE]')
+        print('usage: ./xm2cc.py PROG_NAME \'CPP_ARGS\' FILE... [> OUT_FILE]')
         sys.exit(1)
     
     cppargs = ['-undef', '-D__XCC_C__=1']
-    if len(sys.argv) > 3:
-        cppargs += sys.argv[3].split(' ')
-    ast = parse_file(sys.argv[2], use_cpp=True, cpp_args=cppargs)
+    cppargs += sys.argv[2].split(' ')
     
-    code = ''
-    code += get_init_code() + '\n'
-    for item in ast:
-        code += compile_obj(item, root=True) + '\n'
+    code = get_init_code() + '\n'
+    for filename in sys.argv[3:]:
+        ast = parse_file(filename, use_cpp=True, cpp_args=cppargs)
+        
+        for item in ast:
+            code += compile_obj(item, root=True) + '\n'
+        
+        current_function = ''
+        variables = []
+        functions = []
+        arrays = []
+        funcfixed = {}
+        enumerators = {}
+        structs = {}
+        structures = {}
+        structuresnoptrs = {}
+        typedefs = {}
     
     compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
 
