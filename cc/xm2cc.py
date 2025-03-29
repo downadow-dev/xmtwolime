@@ -1083,7 +1083,8 @@ if __name__ == '__main__':
         sys.exit(1)
     
     cppargs = ['-undef', '-D__XCC_C__=1']
-    cppargs += sys.argv[2].split(' ')
+    if sys.argv[2] != '':
+        cppargs += sys.argv[2].split(' ')
     
     code = get_init_code() + '\n'
     for filename in sys.argv[3:]:
