@@ -182,7 +182,8 @@ def static_int(obj):
     if type(obj) == Constant and (obj.type.startswith('unsigned') or obj.type.startswith('long')):
         obj.type = 'int'
     
-    obj.value = obj.value.lower().replace('u', '').replace('l', '')
+    if type(obj) == Constant:
+        obj.value = obj.value.lower().replace('u', '').replace('l', '')
     
     if type(obj) == Constant and obj.type == 'int' and obj.value == '0':
         return 0
@@ -201,7 +202,7 @@ def static_int(obj):
     elif type(obj) == BinaryOp and obj.op == '*':
         return static_int(obj.left) * static_int(obj.right)
     elif type(obj) == BinaryOp and obj.op == '/':
-        return static_int(obj.left) / static_int(obj.right)
+        return static_int(obj.left) // static_int(obj.right)
     elif type(obj) == BinaryOp and obj.op == '%':
         return static_int(obj.left) % static_int(obj.right)
     elif type(obj) == BinaryOp and obj.op == '^':
