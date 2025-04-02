@@ -54,20 +54,6 @@ __0_/:
 	
 	jmp %R_FA_8%
 
-;; возведение
-__0_**:
-	dec %R_FA_9%
-	ild %R_FA_9%, %R_FA_0%
-	dec %R_FA_9%
-	ild %R_FA_9%, %R_FA_1%
-	
-	exp %R_FA_1% %R_FA_0%, %R_FA_0%
-	
-	isv %R_FA_0%, %R_FA_9%
-	inc %R_FA_9%
-	
-	jmp %R_FA_8%
-
 ;; получение остатка
 __0_mod:
 	dec %R_FA_9%
