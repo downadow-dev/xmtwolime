@@ -758,13 +758,13 @@ def compile_obj(obj, root=False):
             return code
         # инкремент и декремент
         elif type(obj) == UnaryOp and obj.op == '++':
-            return '(' + compile_obj(obj.expr) + ' ++) ' + compile_obj(obj.expr)[:-2] + ' = ' + (compile_obj(obj.expr) if not root else '')
+            return '' + compile_obj(obj.expr)[:-2] + ' ' + ('dup ' if not root else ' ') + 'dup . ++ swap =' + (' .' if not root else '')
         elif type(obj) == UnaryOp and obj.op == '--':
-            return '(' + compile_obj(obj.expr) + ' --) ' + compile_obj(obj.expr)[:-2] + ' = ' + (compile_obj(obj.expr) if not root else '')
+            return '' + compile_obj(obj.expr)[:-2] + ' ' + ('dup ' if not root else ' ') + 'dup . -- swap =' + (' .' if not root else '')
         elif type(obj) == UnaryOp and obj.op == 'p++':
-            return (compile_obj(obj.expr) if not root else '') + ' (' + compile_obj(obj.expr) + ' ++) ' + compile_obj(obj.expr)[:-2] + ' ='
+            return '' + compile_obj(obj.expr)[:-2] + ' ' + ('dup . swap ' if not root else ' ') + 'dup . ++ swap ='
         elif type(obj) == UnaryOp and obj.op == 'p--':
-            return (compile_obj(obj.expr) if not root else '') + ' (' + compile_obj(obj.expr) + ' --) ' + compile_obj(obj.expr)[:-2] + ' ='
+            return '' + compile_obj(obj.expr)[:-2] + ' ' + ('dup . swap ' if not root else ' ') + 'dup . -- swap ='
         # получение адреса переменной/массива/элемента массива/структуры
         elif type(obj) == UnaryOp and obj.op == '&' and type(obj.expr) == ID and obj.expr.name in structures:
             return '{' + obj.expr.name + '}'
