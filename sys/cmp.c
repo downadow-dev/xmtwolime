@@ -1,9 +1,7 @@
 /* сравнение двух файлов */
 
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <xmtwolime.h>
 #include <file.h>
 
@@ -28,11 +26,11 @@ void main(int argc, char *argv[]) {
     if(strlen(addr2) != length)
         exit(2);
     
-    bool eq = true;
+    int eq = 1;
     for(int i = 0; i < length; i++) {
         if(addr1[i] != addr2[i]) {
             printf("%d: %c/%c\n", i, addr1[i], addr2[i]);
-            eq = false;
+            eq = 0;
         }
     }
     

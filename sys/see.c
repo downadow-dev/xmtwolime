@@ -1,7 +1,6 @@
 #include <xmtwolime.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 
 void main(int argc, char *argv[]) {
     if(argc < 2) {
@@ -9,10 +8,10 @@ void main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    bool nflag = false;
+    int nflag = 0;
     
     if(argv[1][0] == '-' && argv[1][1] == 'n') {
-        nflag = true;
+        nflag++;
         ++argv;
         --argc;
     }
@@ -26,7 +25,7 @@ void main(int argc, char *argv[]) {
     char *addr = filedata(f) + (argc > 2 ? atoi(argv[2]) : 0);
     char *start = addr;
     
-    while(true) {
+    for(;;) {
         clear_output();
         
         for(int i = 0, j = 0; j < 25; i++) {

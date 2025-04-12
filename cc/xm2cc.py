@@ -292,10 +292,10 @@ def compile_obj(obj, root=False):
             savedenumerators = enumerators.copy()
             savedtypedefs = typedefs.copy()
             
-            # создавать функции получается только в глобальном пространстве имён ('')
+            # вложенные функции не поддерживаются
             if current_function != '':
                 raise Exception('create function: current_function != \'\'')
-            #########################################################################
+            #####################################
             elif obj.decl.name == 'main':
                 code += 'main:\n'
                 current_function = 'main'
@@ -620,14 +620,8 @@ def compile_obj(obj, root=False):
             
             return code
         # число
-        elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and not obj.value.startswith('0') and not root:
-            return str(int(obj.value.lower().replace('l', '').replace('u', ''), base=0))
-        elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and obj.value.startswith('0x') and not root:
-            return str(int(obj.value[2:].lower().replace('l', '').replace('u', ''), base=16))
-        elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and obj.value.startswith('0b') and not root:
-            return str(int(obj.value[2:].lower().replace('l', '').replace('u', ''), base=2))
         elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and not root:
-            return str(int(obj.value.lower().replace('l', '').replace('u', ''), base=8))
+            return str(static_int(obj))
         # символ
         elif type(obj) == Constant and obj.type == 'char' and not root:
             return str(ord(preprocess_string(obj.value)))

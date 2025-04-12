@@ -17,7 +17,7 @@ void main(int argc, char *argv[]) {
     
     char *addr = filedata(f) + (argc > 2 ? atoi(argv[2]) : 0);
     
-    while(true) {
+    for(;;) {
         clear_output();
         
         for(int i = 0; i < 27; i++) {
