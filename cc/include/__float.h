@@ -71,6 +71,16 @@ float __fmul(float y, float x) {
     _call("funzip", x, &x_n, &x_lw);
     _call("funzip", y, &y_n, &y_lw);
     
+    while(x_lw + y_lw > 4) {
+        if(x_lw > y_lw) {
+            x_n /= 10;
+            x_lw--;
+        } else {
+            y_n /= 10;
+            y_lw--;
+        }
+    }
+    
     x_n  *= y_n;
     x_lw += y_lw;
     
