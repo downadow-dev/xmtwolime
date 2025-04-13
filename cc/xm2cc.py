@@ -8,7 +8,11 @@ current_function = ''   # мы находимся в теле этой функ�
 
 variables = []          # переменные
 functions = []          # функции
+functions_floatparams = {}
 arrays = []
+floats = []
+floatptrs = []
+floatptrptrs = []
 
 funcfixed = {}
 
@@ -35,6 +39,51 @@ def get_var(name):
 
 def is_array(name):
     return ((current_function != '' and (current_function + '.' + name) in arrays) or name in arrays)
+
+def is_float(obj, ptrlvl=0):
+    if type(obj) == str and ptrlvl == 2:
+        return ((current_function != '' and (current_function + '.' + obj) in floatptrptrs) or obj in floatptrptrs)
+    elif type(obj) == str and ptrlvl == 1:
+        return ((current_function != '' and (current_function + '.' + obj) in floatptrs) or obj in floatptrs)
+    elif type(obj) == str and ptrlvl == 0:
+        return ((current_function != '' and (current_function + '.' + obj) in floats) or obj in floats)
+    elif type(obj) == Decl:
+        return is_float(obj.type, ptrlvl=ptrlvl)
+    elif type(obj) == PtrDecl:
+        return is_float(obj.type, ptrlvl=ptrlvl+1)
+    elif type(obj) == Assignment:
+        return is_float(obj.lvalue, ptrlvl=ptrlvl)
+    elif type(obj) == FuncCall:
+        return is_float(obj.name, ptrlvl=ptrlvl)
+    elif type(obj) == Cast:
+        return is_float(obj.to_type, ptrlvl=ptrlvl)
+    elif type(obj) == Typename:
+        return is_float(obj.type, ptrlvl=ptrlvl)
+    elif type(obj) == TypeDecl:
+        return is_float(obj.type, ptrlvl=ptrlvl)
+    elif type(obj) == IdentifierType and ('float' in obj.names or 'double' in obj.names) and ptrlvl == 0:
+        return True
+    elif type(obj) == Constant and ('float' in obj.type or 'double' in obj.type) and ptrlvl == 0:
+        return True
+    elif type(obj) == ID:
+        return is_float(obj.name, ptrlvl=ptrlvl)
+    elif type(obj) == UnaryOp and obj.op == '*':
+        return is_float(obj.expr, ptrlvl=ptrlvl-1)
+    elif type(obj) == UnaryOp and obj.op == '&':
+        return is_float(obj.expr, ptrlvl=ptrlvl+1)
+    elif type(obj) == UnaryOp:
+        return is_float(obj.expr, ptrlvl=ptrlvl)
+    elif type(obj) == BinaryOp and obj.op != '&&' and obj.op != '||':
+        return is_float(obj.left, ptrlvl=ptrlvl) or is_float(obj.right, ptrlvl=ptrlvl)
+    elif type(obj) == ArrayRef:
+        return is_float(obj.name, ptrlvl=ptrlvl+1)
+    elif type(obj) == StructRef:
+        struct = get_struct(obj.name)
+        for decl in struct:
+            if obj.field.name == decl.name:
+                return is_float(decl.type)
+    else:
+        return False
 
 # создаёт переменную/массив
 def create_var(name, array_len=0):
@@ -145,17 +194,17 @@ def compile_cond(op):
     
     if type(op) == BinaryOp:
         if op.op == '==':
-            return compile_obj(op.left) + ' ' + compile_obj(op.right) + ' =?'
+            return compile_obj(op.left, flt=is_float(op)) + ' ' + compile_obj(op.right, flt=is_float(op)) + ' ' + ('=?' if not is_float(op) else '@__feq')
         elif op.op == '!=':
-            return compile_obj(op.left) + ' ' + compile_obj(op.right) + ' !?'
+            return compile_obj(op.left, flt=is_float(op)) + ' ' + compile_obj(op.right, flt=is_float(op)) + ' ' + ('!?' if not is_float(op) else '@__fne')
         elif op.op == '<':
-            return compile_obj(op.left) + ' ' + compile_obj(op.right) + ' lt?'
+            return compile_obj(op.left, flt=is_float(op)) + ' ' + compile_obj(op.right, flt=is_float(op)) + ' ' + ('lt?' if not is_float(op) else '@__flt')
         elif op.op == '>':
-            return compile_obj(op.left) + ' ' + compile_obj(op.right) + ' gt?'
+            return compile_obj(op.left, flt=is_float(op)) + ' ' + compile_obj(op.right, flt=is_float(op)) + ' ' + ('gt?' if not is_float(op) else '@__fgt')
         elif op.op == '>=':
-            return compile_obj(op.left) + ' ' + compile_obj(op.right) + ' -- gt?'
+            return compile_obj(op.left, flt=is_float(op)) + ' ' + compile_obj(op.right, flt=is_float(op)) + ' ' + ('-- gt?' if not is_float(op) else '@__fge')
         elif op.op == '<=':
-            return compile_obj(op.left) + ' ' + compile_obj(op.right) + ' ++ lt?'
+            return compile_obj(op.left, flt=is_float(op)) + ' ' + compile_obj(op.right, flt=is_float(op)) + ' ' + ('++ lt?' if not is_float(op) else '@__fle')
         
         elif op.op == '&&':
             code = ''
@@ -235,13 +284,17 @@ def preprocess_typedefs(obj):
 
 current_string = -1
 # компиляция числа, переменной и т. д.
-def compile_obj(obj, root=False):
+def compile_obj(obj, root=False, flt=False):
     global continuel
     global current_string
     global current_function
     global variables
     global arrays
     global functions
+    global functions_floatparams
+    global floats
+    global floatptrs
+    global floatptrptrs
     global current_if
     global current_while
     global current_for
@@ -254,9 +307,9 @@ def compile_obj(obj, root=False):
     global current_break
     global typedefs
     
+    obj = preprocess_typedefs(obj)
+    
     try:
-        obj = preprocess_typedefs(obj)
-        
         if type(obj) == Typedef:
             typedefs[obj.name] = preprocess_typedefs(obj.type)
             return ''
@@ -264,6 +317,47 @@ def compile_obj(obj, root=False):
             return ''
         elif type(obj) == DoWhile and type(obj.cond) == Constant and obj.cond.type == 'int' and obj.cond.value == '0':
             return compile_obj(obj.stmt)
+        # float
+        elif not flt and not root and is_float(obj):
+            return compile_obj(obj, flt=True) + ' @__f2i'
+        elif type(obj) == Constant and is_float(obj):
+            n = int(obj.value.split('.')[0])
+            lw = 0
+            
+            if '.' in obj.value:
+                s = obj.value.lower().replace('f', '').split('.')[1].split('e')[0]
+                for i in range(len(s)):
+                    n *= 10
+                    lw += 1
+                n += int(s)
+            
+            if 'e' in obj.value.lower():
+                num = int(obj.value.lower().replace('f', '').split('e')[1])
+                if num < 0:
+                    lw += -num
+                else:
+                    while num > 0:
+                        if lw > 0:
+                            lw -= 1
+                        else:
+                            n *= 10
+            
+            return str(n | (lw << 28))
+        elif type(obj) == BinaryOp and obj.op in '+-/*' and is_float(obj):
+            return compile_obj(obj.left, flt=True) + ' ' + compile_obj(obj.right, flt=True) + ' @__f' + obj.op.replace('+', 'add').replace('-', 'sub').replace('/', 'div').replace('*', 'mul')
+        elif type(obj) == Assignment and obj.op == '=' and is_float(obj):
+            return compile_obj(obj.lvalue, flt=True)[:-2] + ' ' + ('dup' if not root else '') + ' ' + compile_obj(obj.rvalue, flt=True) + ' swap = ' + ('.' if not root else '')
+        elif type(obj) == Assignment and obj.op[0] in '+-/*' and obj.op.endswith('=') and is_float(obj):
+            return compile_obj(obj.lvalue, flt=True)[:-2] + ' dup ' + ('dup' if not root else '') + ' . ' + compile_obj(obj.rvalue, flt=True) + ' @__f' + obj.op[0].replace('+', 'add').replace('-', 'sub').replace('/', 'div').replace('*', 'mul') + ' swap = ' + ('.' if not root else '')
+        elif type(obj) == UnaryOp and obj.op == '++' and is_float(obj):
+            return '' + compile_obj(obj.expr, flt=True)[:-2] + ' ' + ('dup ' if not root else ' ') + 'dup . 1 @__fadd swap =' + (' .' if not root else '')
+        elif type(obj) == UnaryOp and obj.op == '--' and is_float(obj):
+            return '' + compile_obj(obj.expr, flt=True)[:-2] + ' ' + ('dup ' if not root else ' ') + 'dup . 1 @__fsub swap =' + (' .' if not root else '')
+        elif type(obj) == UnaryOp and obj.op == 'p++' and is_float(obj):
+            return '' + compile_obj(obj.expr, flt=True)[:-2] + ' ' + ('dup . swap ' if not root else ' ') + 'dup . 1 @__fadd swap ='
+        elif type(obj) == UnaryOp and obj.op == 'p--' and is_float(obj):
+            return '' + compile_obj(obj.expr, flt=True)[:-2] + ' ' + ('dup . swap ' if not root else ' ') + 'dup . 1 @__fsub swap ='
+        ########################
         elif type(obj) == Compound:
             code = ''
             if obj.block_items != None:
@@ -291,6 +385,9 @@ def compile_obj(obj, root=False):
             savedstructuresnoptrs = structuresnoptrs.copy()
             savedenumerators = enumerators.copy()
             savedtypedefs = typedefs.copy()
+            savedfloats = floats.copy()
+            savedfloatptrs = floatptrs.copy()
+            savedfloatptrptrs = floatptrptrs.copy()
             
             # вложенные функции не поддерживаются
             if current_function != '':
@@ -316,16 +413,34 @@ def compile_obj(obj, root=False):
                     functions += [obj.decl.name]
                 current_function = obj.decl.name
                 
+                if type(obj.decl.type.type) == TypeDecl and type(obj.decl.type.type.type) == IdentifierType and ('float' in obj.decl.type.type.type.names or 'double' in obj.decl.type.type.type.names):
+                    floats += [obj.decl.name]
+                    savedfloats = floats.copy()
+                    savedfloatptrs = floatptrs.copy()
+                    savedfloatptrptrs = floatptrptrs.copy()
+                elif type(obj.decl.type.type) == PtrDecl and type(obj.decl.type.type.type) == TypeDecl and type(obj.decl.type.type.type.type) == IdentifierType and ('float' in obj.decl.type.type.type.type.names or 'double' in obj.decl.type.type.type.type.names):
+                    floatptrs += [obj.decl.name]
+                    savedfloats = floats.copy()
+                    savedfloatptrs = floatptrs.copy()
+                    savedfloatptrptrs = floatptrptrs.copy()
+                elif type(obj.decl.type.type) == PtrDecl and type(obj.decl.type.type.type) == PtrDecl and type(obj.decl.type.type.type.type) == TypeDecl and type(obj.decl.type.type.type.type.type) == IdentifierType and ('float' in obj.decl.type.type.type.type.type.names or 'double' in obj.decl.type.type.type.type.type.names):
+                    floatptrptrs += [obj.decl.name]
+                    savedfloats = floats.copy()
+                    savedfloatptrs = floatptrs.copy()
+                    savedfloatptrptrs = floatptrptrs.copy()
+                
                 code += obj.decl.name + ': {___function}\n'
                 
                 try:
                     i = 0
+                    functions_floatparams[obj.decl.name] = []
                     for param in obj.decl.type.args.params:
                         if type(param) == EllipsisParam:
                             funcfixed[obj.decl.name] = i
                             code += create_var('___vargs', 126)
                             break
-                        code += compile_obj(param) + '\n'
+                        code += compile_obj(param, root=True) + '\n'
+                        functions_floatparams[obj.decl.name] += [is_float(param)]
                         if not param.name in structuresnoptrs:
                             code += get_var(param.name) + ' =\n'
                         else:
@@ -353,6 +468,9 @@ def compile_obj(obj, root=False):
             structuresnoptrs = savedstructuresnoptrs
             enumerators = savedenumerators
             typedefs = savedtypedefs
+            floats = savedfloats
+            floatptrs = savedfloatptrs
+            floatptrptrs = savedfloatptrptrs
             
             return code
         # новый enum
@@ -514,7 +632,7 @@ def compile_obj(obj, root=False):
         elif type(obj) == DeclList:
             code = ''
             for item in obj.decls:
-                code += compile_obj(item) + '\n'
+                code += compile_obj(item, root=root) + '\n'
             return code
         elif type(obj) == Decl and type(obj.type) == ArrayDecl and type(obj.type.type) == TypeDecl and (type(obj.type.type.type) == Struct or type(obj.type.type.type) == Union):
             name = (obj.type.type.type.name if obj.type.type.type.name != None else obj.name + '__STRUCT')
@@ -532,13 +650,17 @@ def compile_obj(obj, root=False):
             code = create_var(obj.name, (static_int(obj.type.dim) if obj.type.dim != None else \
               (len(obj.init.exprs) if type(obj.init) == InitList else len(preprocess_string(obj.init.value)) + 1))) + '\n'
             
+            if type(obj.type.type) == TypeDecl and type(obj.type.type.type) == IdentifierType and ('float' in obj.type.type.type.names or 'double' in obj.type.type.type.names):
+                floatptrs += [get_var(obj.name)[1:-1]]
+            elif type(obj.type.type) == PtrDecl and type(obj.type.type.type) == TypeDecl and type(obj.type.type.type.type) == IdentifierType and ('float' in obj.type.type.type.type.names or 'double' in obj.type.type.type.type.names):
+                floatptrptrs += [get_var(obj.name)[1:-1]]
+            
             if obj.init != None and type(obj.init) == InitList:
                 code += get_var(obj.name) + ' 0 ' + get_var(obj.name)[:-1] + '.length}' + ' memset\n'
                 for i in range(len(obj.init.exprs)):
-                    code += compile_obj(obj.init.exprs[i]) + ' (' + get_var(obj.name) + ' ' \
+                    code += compile_obj(obj.init.exprs[i], flt=(get_var(obj.name)[1:-1] in floatptrs or get_var(obj.name)[1:-1] in floatptrptrs)) + ' (' + get_var(obj.name) + ' ' \
                     + (str(i) if type(obj.init.exprs[i]) != NamedInitializer else compile_obj(obj.init.exprs[i].name[0])) \
                     + ' +) =\n'
-            
             elif obj.init != None and type(obj.init) == Constant:
                 for i in range(len(preprocess_string(obj.init.value))):
                     code += str(ord(preprocess_string(obj.init.value)[i])) + ' (' + get_var(obj.name) + ' ' + str(i) + ' +) =\n'
@@ -570,11 +692,19 @@ def compile_obj(obj, root=False):
             if type(obj.type) == TypeDecl and type(obj.type.type) == Enum:
                 compile_obj(Decl(None, None, None, None, None, obj.type.type, None, None))
             variables += [current_function + '.' + obj.name]
+            
+            if type(obj.type) == TypeDecl and type(obj.type.type) == IdentifierType and ('float' in obj.type.type.names or 'double' in obj.type.type.names):
+                floats += [get_var(obj.name)[1:-1]]
+            elif type(obj.type) == PtrDecl and type(obj.type.type) == TypeDecl and type(obj.type.type.type) == IdentifierType and ('float' in obj.type.type.type.names or 'double' in obj.type.type.type.names):
+                floatptrs += [get_var(obj.name)[1:-1]]
+            elif type(obj.type) == PtrDecl and type(obj.type.type) == PtrDecl and type(obj.type.type.type) == TypeDecl and type(obj.type.type.type.type) == IdentifierType and ('float' in obj.type.type.type.type.names or 'double' in obj.type.type.type.type.names):
+                floatptrptrs += [get_var(obj.name)[1:-1]]
+            
             code += '/alloc ' + current_function + '.' + obj.name + '___ARRAY__[64]\n'
             code += '/define ' + current_function + '.' + obj.name + ' :{' \
                 + current_function + '.' + obj.name + '___ARRAY__} {__retptr}! +\n'
             if obj.init != None:
-                code += compile_obj(Assignment('=', ID(current_function + '.' + obj.name), obj.init), root=True) + '\n'
+                code += (compile_obj(obj.init, flt=is_float(obj)) if obj.init != None else '0') + ' ' + get_var(obj.name) + ' =\n'
             
             return code
         elif type(obj) == Decl:
@@ -601,12 +731,20 @@ def compile_obj(obj, root=False):
                         enumerators[item.name] = i
                         i += 1
             code += create_var(obj.name)
+            
+            if type(obj.type) == TypeDecl and type(obj.type.type) == IdentifierType and ('float' in obj.type.type.names or 'double' in obj.type.type.names):
+                floats += [get_var(obj.name)[1:-1]]
+            elif type(obj.type) == PtrDecl and type(obj.type.type) == TypeDecl and type(obj.type.type.type) == IdentifierType and ('float' in obj.type.type.type.names or 'double' in obj.type.type.type.names):
+                floatptrs += [get_var(obj.name)[1:-1]]
+            elif type(obj.type) == PtrDecl and type(obj.type.type) == PtrDecl and type(obj.type.type.type) == TypeDecl and type(obj.type.type.type.type) == IdentifierType and ('float' in obj.type.type.type.type.names or 'double' in obj.type.type.type.type.names):
+                floatptrptrs += [get_var(obj.name)[1:-1]]
+            
             if current_function == '' or obj.init != None:
-                code += (compile_obj(obj.init) if obj.init != None else '0') + ' ' + get_var(obj.name) + ' =\n'
+                code += (compile_obj(obj.init, flt=is_float(obj)) if obj.init != None else '0') + ' ' + get_var(obj.name) + ' =\n'
             return code
         ######################################################
         elif type(obj) == Cast:
-            return compile_obj(obj.expr)
+            return compile_obj(obj.expr, root=root, flt=is_float(obj.to_type))
         # тернарный оператор
         elif type(obj) == TernaryOp:
             code = ''
@@ -615,8 +753,8 @@ def compile_obj(obj, root=False):
             current_if += 1
             
             code += compile_cond(obj.cond) + ' ~___tElse' + str(saved) + ' else '
-            code += compile_obj(obj.iftrue) + ' ~___tEndif' + str(saved) + ' goto ___tElse' + str(saved) + ': '
-            code += compile_obj(obj.iffalse) + ' ___tEndif' + str(saved) + ':'
+            code += compile_obj(obj.iftrue, flt=flt) + ' ~___tEndif' + str(saved) + ' goto ___tElse' + str(saved) + ': '
+            code += compile_obj(obj.iffalse, flt=flt) + ' ___tEndif' + str(saved) + ':'
             
             return code
         # число
@@ -655,13 +793,13 @@ def compile_obj(obj, root=False):
             return '1'
         # -выражение
         elif type(obj) == UnaryOp and obj.op == '-':
-            return compile_obj(obj.expr) + ' neg'
+            return compile_obj(obj.expr, flt=flt, root=root) + ' neg'
         # +выражение
         elif type(obj) == UnaryOp and obj.op == '+':
-            return compile_obj(obj.expr)
+            return compile_obj(obj.expr, flt=flt, root=root)
         # ~выражение
         elif type(obj) == UnaryOp and obj.op == '~':
-            return compile_obj(obj.expr) + ' neg --'
+            return compile_obj(obj.expr, root=root) + ' neg --'
         # поле объединения/структуры
         elif type(obj) == StructRef and not root:
             i = 0
@@ -694,7 +832,7 @@ def compile_obj(obj, root=False):
             exprs.reverse()
             
             for o in exprs:
-                code += compile_obj(o) + '\n'
+                code += compile_obj(o, flt=is_float(o)) + '\n'
             
             code += '~____C' + str(continuel) + ' ' + compile_obj(obj.name) + ' goto ____C' + str(continuel) + ':\n'
             continuel += 1
@@ -716,7 +854,7 @@ def compile_obj(obj, root=False):
         ###################################
         elif type(obj) == FuncCall and obj.name.name == '__extern_label' and not obj.name.name in functions:
             return '<' + obj.args.exprs[0].value[1:-1] + '>'
-        elif type(obj) == FuncCall and obj.name.name == '_call' and not obj.name.name in functions:
+        elif type(obj) == FuncCall and obj.name.name == '_call':
             code = ''
             exprs = []
             if obj.args != None:
@@ -724,7 +862,7 @@ def compile_obj(obj, root=False):
             if obj.name.name in functions:
                 exprs.reverse()
             for o in exprs:
-                code += compile_obj(o) + ' '
+                code += compile_obj(o, flt=is_float(o)) + ' '
             code += preprocess_string(obj.args.exprs[0].value)
             return code
         # вызов функции (2)
@@ -740,11 +878,13 @@ def compile_obj(obj, root=False):
                     vargs += exprs[funcfixed[obj.name.name]:]
                     exprs = exprs[:funcfixed[obj.name.name]]
                 exprs.reverse()
+            i = 1
             for o in exprs:
-                code += compile_obj(o) + '\n'
+                code += compile_obj(o, flt=(functions_floatparams[obj.name.name][-i] if obj.name.name in functions else is_float(o))) + '\n'
+                i += 1
             i = 0
             for o in vargs:
-                code += compile_obj(o) + ' ({' + obj.name.name + '.___vargs} ' + str(i) + ' +) =\n'
+                code += compile_obj(o, flt=is_float(o)) + ' ({' + obj.name.name + '.___vargs} ' + str(i) + ' +) =\n'
                 i += 1
             code += ('@' if obj.name.name in functions else '') + obj.name.name
             if (obj.name.name in functions or obj.name.name == 'memset' or obj.name.name == 'memcpy' or obj.name.name == 'getc') and root:
@@ -763,10 +903,10 @@ def compile_obj(obj, root=False):
         elif type(obj) == UnaryOp and obj.op == '&' and type(obj.expr) == ID and obj.expr.name in structures:
             return '{' + obj.expr.name + '}'
         elif type(obj) == UnaryOp and obj.op == '&':
-            return compile_obj(obj.expr)[:-2]
+            return compile_obj(obj.expr, flt=is_float(obj.expr))[:-2]
         # *expr
         elif type(obj) == UnaryOp and obj.op == '*':
-            return compile_obj(obj.expr) + ' .'
+            return compile_obj(obj.expr, flt=is_float(obj.expr)) + ' .'
         # while
         elif type(obj) == While:
             code = ''
@@ -806,7 +946,7 @@ def compile_obj(obj, root=False):
             code += '___dowhile' + str(saved) + ':\n'
             
             if type(obj.stmt) == Compound:
-                for item in obj.stmt.block_items:
+                for item in (obj.stmt.block_items if obj.stmt.block_items != None else []):
                     code += '\t' + compile_obj(item, root=True) + '\n'
             else:
                 code += '\t' + compile_obj(obj.stmt, root=True) + '\n'
@@ -832,7 +972,7 @@ def compile_obj(obj, root=False):
             code += ' ~___endfor' + str(saved) + ' else ' + (';' if current_function == 'main' else '') + '\n'
             
             if type(obj.stmt) == Compound:
-                for item in obj.stmt.block_items:
+                for item in (obj.stmt.block_items if obj.stmt.block_items != None else []):
                     current_continue = '___preendfor' + str(saved)
                     current_break = '___endfor' + str(saved)
                     code += '\t' + compile_obj(item, root=True) + '\n'
@@ -906,8 +1046,7 @@ def compile_obj(obj, root=False):
             return '# (unknown) #\n'
     except Exception as e:
         #raise e
-        print('*** compile_obj() error (\n\t' + str(e) + '\n)', file=sys.stderr)
-        return ''
+        return '# (error) #\n'
 
 ###################################################################
 
@@ -1092,12 +1231,16 @@ if __name__ == '__main__':
         variables = []
         functions = []
         arrays = []
+        floats = []
+        floatptrs = []
+        floatptrptrs = []
+        functions_floatparams = {}
         funcfixed = {}
         enumerators = {}
         structs = {}
         structures = {}
         structuresnoptrs = {}
         typedefs = {}
-    
+    #print(code)
     compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
 

@@ -53,6 +53,7 @@ int vsprintf(char *s, char *fmt, va_list ap) {
     char *p;
     char *orig = s;
     int zfill, alt;
+    int i, n, l, lw;
     
     while(*fmt) {
         zfill = 0;
@@ -148,6 +149,26 @@ int vsprintf(char *s, char *fmt, va_list ap) {
                     s = _sprinti(va_arg(ap, int), s, 8, 0);
                 }
                 break;
+#ifdef __FLOATS__
+            case 'f': case 'F':
+                _call("funzip", (float)va_arg(ap, double), &n, &lw);
+                if((*s++ = (n < 0) ? '-' : '+') == '-')
+                    n = -n;
+                
+                i = n, l = 0;
+                for(int j = 0; j < lw; j++)
+                    i /= 10;
+                l = i;
+                for(int j = 0; j < lw; j++)
+                    l *= 10;
+                l = n - l;
+                
+                s = _sprinti(i, s, 10, 0);
+                *s++ = '.';
+                s = _sprinti(l, s, 10, 0);
+                
+                break;
+#endif
             case 'c':
                 *s = (char)va_arg(ap, int);
                 if(*s) s++;

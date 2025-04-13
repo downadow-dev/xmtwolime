@@ -32,7 +32,7 @@ echo '}' >> sys/main.c
 
 #####################################################
 
-python3 cc/xm2cc.py xtl '-Icc/include -Iinclude -include cc/include/___get_args.h' sys/main.c > software/xtl_sys.s
+python3 cc/xm2cc.py xtl '-Icc/include -Iinclude -include cc/include/___get_args.h -include cc/include/__float.h' sys/main.c > software/xtl_sys.s
 rm sys/main.c
 
 rm -f *tab.py

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <xmtwolime.h>
 
-int main(void) {
+void main(int argc, char **argv) {
     clear_output();
     
     setcolor(GREEN);

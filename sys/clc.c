@@ -2,66 +2,50 @@
 #include <stdlib.h>
 
 void main(int argc, char *argv[]) {
-    int base = 10;
-    int stack[100];
+    float stack[100];
     int stackptr = 0;
     
-    if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x') {
-        base = 16;
-        argv++;
-        argc--;
-    } else if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'o') {
-        base = 8;
-        argv++;
-        argc--;
-    }
-    
-    memset(stack, '\0', sizeof(stack));
-    
     for(int i = 1; i < argc; i++) {
-        /* защита от переполнения */
-        if(stackptr < 0 || stackptr >= sizeof(stack))
-            exit(EXIT_FAILURE);
-        
         switch(argv[i][0]) {
         /* операции */
         case '+':
             stackptr -= 2;
+            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] + stack[stackptr + 1];
             stackptr++;
             break;
         case '-':
             stackptr -= 2;
+            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] - stack[stackptr + 1];
             stackptr++;
             break;
         case '*':
             stackptr -= 2;
+            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] * stack[stackptr + 1];
             stackptr++;
             break;
         case '/':
             stackptr -= 2;
+            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] / stack[stackptr + 1];
-            stackptr++;
-            break;
-        case '%':
-            stackptr -= 2;
-            stack[stackptr] = stack[stackptr] % stack[stackptr + 1];
             stackptr++;
             break;
         
         /* число */
         default:
-            stack[stackptr++] = atoi(argv[i]);
+            if(stackptr >= sizeof(stack)) exit(EXIT_FAILURE);
+            stack[stackptr++] = atof(argv[i]);
+            break;
         }
     }
     
     if(stackptr > 0) {
-        printf(base == 10 ? "%d\n" : (base == 16 ? "%X\n" : "%o\n"), stack[--stackptr]);
+        printf("%f", stack[--stackptr]);
         exit(EXIT_SUCCESS);
     } else {
-        puts("usage: xtl clc [-{x|o}] CODE  (e.g. '2 4 +')");
+        puts("usage: xtl clc [-{x|o}] CODE  (e.g. '2.0 4.0 +')");
         exit(EXIT_FAILURE);
     }
 }

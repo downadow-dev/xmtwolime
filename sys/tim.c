@@ -10,12 +10,12 @@ void main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    int time = atoi(argv[2]) + atoi(argv[1]) * 60;
-    while(time) {
+    int time = clock() + (atoi(argv[2]) + atoi(argv[1]) * 60) * 1000;
+    while(clock() < time) {
         clear_output();
-        printf("%dm %ds", time / 60, time % 60);
-        sleep(1);
+        printf("%dm %ds", (time - clock() + 1000) / 1000 / 60, ((time - clock() + 1000) / 1000) % 60);
         time--;
+        msleep(100);
     }
     clear_output();
     setbg(WHITE);
