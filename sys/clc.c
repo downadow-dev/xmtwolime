@@ -45,7 +45,7 @@ void main(int argc, char *argv[]) {
         printf("%f", stack[--stackptr]);
         exit(EXIT_SUCCESS);
     } else {
-        puts("usage: xtl clc [-{x|o}] CODE  (e.g. '2.0 4.0 +')");
+        puts("usage: xtl clc CODE  (e.g. '2.0 4.0 +')");
         exit(EXIT_FAILURE);
     }
 }
