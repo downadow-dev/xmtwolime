@@ -41,9 +41,9 @@ def is_array(name):
     return ((current_function != '' and (current_function + '.' + name) in arrays) or name in arrays)
 
 def is_float(obj, ptrlvl=0):
-    if type(obj) == str and ptrlvl == 2:
+    if type(obj) == str and ptrlvl == -2:
         return ((current_function != '' and (current_function + '.' + obj) in floatptrptrs) or obj in floatptrptrs)
-    elif type(obj) == str and ptrlvl == 1:
+    elif type(obj) == str and ptrlvl == -1:
         return ((current_function != '' and (current_function + '.' + obj) in floatptrs) or obj in floatptrs)
     elif type(obj) == str and ptrlvl == 0:
         return ((current_function != '' and (current_function + '.' + obj) in floats) or obj in floats)
@@ -76,7 +76,7 @@ def is_float(obj, ptrlvl=0):
     elif type(obj) == BinaryOp and obj.op != '&&' and obj.op != '||':
         return is_float(obj.left, ptrlvl=ptrlvl) or is_float(obj.right, ptrlvl=ptrlvl)
     elif type(obj) == ArrayRef:
-        return is_float(obj.name, ptrlvl=ptrlvl+1)
+        return is_float(obj.name, ptrlvl=ptrlvl-1)
     elif type(obj) == StructRef:
         struct = get_struct(obj.name)
         for decl in struct:
@@ -618,7 +618,7 @@ def compile_obj(obj, root=False, flt=False):
             return '\n"' + s.replace('"', '`') + '" ___s' + str(current_string) + '\n&___s' + str(current_string)
         # return
         elif type(obj) == Return:
-            return (compile_obj(obj.expr) if obj.expr != None else '0') + ' ' + ('{return}' if current_function != 'main' else 'exit')
+            return (compile_obj(obj.expr, flt=is_float(current_function)) if obj.expr != None else '0') + ' ' + ('{return}' if current_function != 'main' else 'exit')
         # FuncDecl
         elif type(obj) == Decl and type(obj.type) == FuncDecl:
             functions += [obj.name]
