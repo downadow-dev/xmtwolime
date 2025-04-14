@@ -9,33 +9,33 @@ void main(int argc, char *argv[]) {
         switch(argv[i][0]) {
         /* операции */
         case '+':
+            if(stackptr < 2) exit(EXIT_FAILURE);
             stackptr -= 2;
-            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] + stack[stackptr + 1];
             stackptr++;
             break;
         case '-':
+            if(stackptr < 2) exit(EXIT_FAILURE);
             stackptr -= 2;
-            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] - stack[stackptr + 1];
             stackptr++;
             break;
         case '*':
+            if(stackptr < 2) exit(EXIT_FAILURE);
             stackptr -= 2;
-            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] * stack[stackptr + 1];
             stackptr++;
             break;
         case '/':
+            if(stackptr < 2) exit(EXIT_FAILURE);
             stackptr -= 2;
-            if(stackptr < 0) exit(EXIT_FAILURE);
             stack[stackptr] = stack[stackptr] / stack[stackptr + 1];
             stackptr++;
             break;
         
         /* число */
         default:
-            if(stackptr >= sizeof(stack)) exit(EXIT_FAILURE);
+            if(stackptr >= sizeof(stack) / sizeof(stack[0])) exit(EXIT_FAILURE);
             stack[stackptr++] = atof(argv[i]);
             break;
         }

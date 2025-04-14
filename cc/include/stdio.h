@@ -152,8 +152,10 @@ int vsprintf(char *s, char *fmt, va_list ap) {
 #ifdef __FLOATS__
             case 'f': case 'F':
                 _call("funzip", (float)va_arg(ap, double), &n, &lw);
-                if((*s++ = (n < 0) ? '-' : '+') == '-')
+                if(n < 0) {
                     n = -n;
+                    *s++ = '-';
+                }
                 
                 i = n, l = 0;
                 for(int j = 0; j < lw; j++)
@@ -164,15 +166,14 @@ int vsprintf(char *s, char *fmt, va_list ap) {
                 l = n - l;
                 
                 s = _sprinti(i, s, 10, 0);
-                *s++ = '.';
-                if(n == l) {
+                if(lw > 0) {
+                    *s++ = '.';
                     p = _sprinti(l, s, 10, 0);
                     memmove(s + (lw - (p - s)), s, p - s + 1);
                     memset(s, '0', lw - (p - s));
                     s = _sprinti(l, s + (lw - (p - s)), 10, 0);
-                } else {
-                    s = _sprinti(l, s, 10, 0);
                 }
+                
                 
                 break;
 #endif
