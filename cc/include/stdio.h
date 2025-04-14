@@ -165,7 +165,6 @@ int vsprintf(char *s, char *fmt, va_list ap) {
                 
                 s = _sprinti(i, s, 10, 0);
                 *s++ = '.';
-                p = _sprinti(l, s, 10, 0);
                 if(n == l) {
                     p = _sprinti(l, s, 10, 0);
                     memmove(s + (lw - (p - s)), s, p - s + 1);
