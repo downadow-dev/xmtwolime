@@ -31,7 +31,7 @@ __0_funzip:
     
     LIB_funzip_final:
     
-    mov %R_FA_2%, 28
+    mov %R_FA_2%, 27
     rshift %R_FA_10% %R_FA_2%, %R_FA_2%
     isv %R_FA_2%, %R_FA_1%
     
@@ -50,7 +50,7 @@ __0_fzip:
     if %R_FA_0% == %R_ZERO%, %R_FA_2%
     
     tnp %R_FA_0%
-    mov %R_FA_2%, 28
+    mov %R_FA_2%, 27
     lshift %R_FA_1% %R_FA_2%, %R_FA_2%
     or %R_FA_0% %R_FA_2%, %R_FA_0%
     tnp %R_FA_0%
@@ -60,7 +60,7 @@ __0_fzip:
     
     LIB_fzip_positive:
     
-    mov %R_FA_2%, 28
+    mov %R_FA_2%, 27
     lshift %R_FA_1% %R_FA_2%, %R_FA_2%
     or %R_FA_0% %R_FA_2%, %R_FA_0%
     isv %R_FA_0%, %R_FA_9%

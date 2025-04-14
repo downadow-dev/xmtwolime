@@ -53,6 +53,8 @@ def is_float(obj, ptrlvl=0):
         return is_float(obj.type, ptrlvl=ptrlvl+1)
     elif type(obj) == Assignment:
         return is_float(obj.lvalue, ptrlvl=ptrlvl)
+    elif type(obj) == FuncCall and type(obj.name) == ID and obj.name.name == '_call' and preprocess_string(obj.args.exprs[0].value) == 'fzip' and ptrlvl == 0:
+        return True
     elif type(obj) == FuncCall:
         return is_float(obj.name, ptrlvl=ptrlvl)
     elif type(obj) == Cast:
@@ -342,7 +344,7 @@ def compile_obj(obj, root=False, flt=False):
                         else:
                             n *= 10
             
-            return str(n | (lw << 28))
+            return str(n | (lw << 27))
         elif type(obj) == BinaryOp and obj.op in '+-/*' and is_float(obj):
             return compile_obj(obj.left, flt=True) + ' ' + compile_obj(obj.right, flt=True) + ' @__f' + obj.op.replace('+', 'add').replace('-', 'sub').replace('/', 'div').replace('*', 'mul')
         elif type(obj) == Assignment and obj.op == '=' and is_float(obj):
@@ -622,9 +624,31 @@ def compile_obj(obj, root=False, flt=False):
         # FuncDecl
         elif type(obj) == Decl and type(obj.type) == FuncDecl:
             functions += [obj.name]
+            if type(obj.type.type) == TypeDecl and type(obj.type.type.type) == IdentifierType and ('float' in obj.type.type.type.names or 'double' in obj.type.type.type.names):
+                floats += [obj.name]
+                savedfloats = floats.copy()
+                savedfloatptrs = floatptrs.copy()
+                savedfloatptrptrs = floatptrptrs.copy()
+            elif type(obj.type.type) == PtrDecl and type(obj.type.type.type) == TypeDecl and type(obj.type.type.type.type) == IdentifierType and ('float' in obj.type.type.type.type.names or 'double' in obj.type.type.type.type.names):
+                floatptrs += [obj.name]
+                savedfloats = floats.copy()
+                savedfloatptrs = floatptrs.copy()
+                savedfloatptrptrs = floatptrptrs.copy()
+            elif type(obj.type.type) == PtrDecl and type(obj.type.type.type) == PtrDecl and type(obj.type.type.type.type) == TypeDecl and type(obj.type.type.type.type.type) == IdentifierType and ('float' in obj.type.type.type.type.type.names or 'double' in obj.type.type.type.type.type.names):
+                floatptrptrs += [obj.name]
+                savedfloats = floats.copy()
+                savedfloatptrs = floatptrs.copy()
+                savedfloatptrptrs = floatptrptrs.copy()
+            
             try:
-                if type(obj.type.args.params[-1]) == EllipsisParam:
-                    funcfixed[obj.name] = len(obj.type.args.params) - 1
+                i = 0
+                functions_floatparams[obj.name] = []
+                for param in obj.type.args.params:
+                    if type(param) == EllipsisParam:
+                        funcfixed[obj.name] = i
+                        break
+                    functions_floatparams[obj.name] += [is_float(param)]
+                    i += 1
             except Exception:
                 ''
             return ''

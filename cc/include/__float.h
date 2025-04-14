@@ -8,11 +8,25 @@
 void __fstrip(float *x) {
     int n, lw;
     _call("funzip", *x, &n, &lw);
-    while(lw > 0 && n % 10 == 0) {
+    int negative;
+    if((negative = (n < 0)))
+        n = -n;
+    while((lw > 0 && n % 10 == 0) || lw > 6) {
         n /= 10;
         lw--;
     }
-    *x = _call("fzip", n, lw);
+    *x = _call("fzip", (negative ? -n : n), lw);
+}
+
+float __fstrip2(int n, int lw) {
+    int negative;
+    if((negative = (n < 0)))
+        n = -n;
+    if(lw > 0) {
+        if(n % 10 >= 5) n = n / 10 + 1; else n /= 10;
+        lw--;
+    }
+    return _call("fzip", (negative ? -n : n), lw);
 }
 
 void __fnormalize(float *x, float *y) {
@@ -71,14 +85,15 @@ float __fmul(float y, float x) {
     _call("funzip", x, &x_n, &x_lw);
     _call("funzip", y, &y_n, &y_lw);
     
-    while(x_lw + y_lw > 4) {
-        if(x_lw > y_lw) {
-            x_n /= 10;
-            x_lw--;
-        } else {
-            y_n /= 10;
-            y_lw--;
-        }
+    if(!( ((x_n < 10000000 && x_n > -10000000) && (y_n < 10 && y_n > -10)) ||
+          ((x_n < 1000000 && x_n > -1000000) && (y_n < 100 && y_n > -100)) ||
+          ((x_n < 100000 && x_n > -100000) && (y_n < 1000 && y_n > -1000)) ||
+          ((x_n < 10000 && x_n > -10000) && (y_n < 10000 && y_n > -10000)) ||
+          ((x_n < 1000 && x_n > -1000) && (y_n < 100000 && y_n > -100000)) ||
+          ((x_n < 100 && x_n > -100) && (y_n < 1000000 && y_n > -1000000)) ||
+          ((x_n < 10 && x_n > -10) && (y_n < 10000000 && y_n > -10000000)) )) {
+
+        return __fmul(__fstrip2(y_n, y_lw), __fstrip2(x_n, x_lw));
     }
     
     x_n  *= y_n;
@@ -90,20 +105,16 @@ float __fmul(float y, float x) {
 float __fdiv(float y, float x) {
     int x_n, x_lw;
     int y_n, y_lw;
+    __fstrip(&x);
     __fstrip(&y);
     _call("funzip", x, &x_n, &x_lw);
     _call("funzip", y, &y_n, &y_lw);
     
-    if(x_n >= 0) {
-        while(x_n < 100000) {
-            x_n *= 10;
-            x_lw++;
-        }
-    } else {
-        while(x_n > -100000) {
-            x_n *= 10;
-            x_lw++;
-        }
+    if(x_n == 0) return 0.0f;
+    
+    while(x_n < 10000000 && x_n > -10000000) {
+        x_n *= 10;
+        x_lw++;
     }
     
     x_n  /= y_n;
