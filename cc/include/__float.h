@@ -85,6 +85,8 @@ float __fmul(float y, float x) {
     _call("funzip", x, &x_n, &x_lw);
     _call("funzip", y, &y_n, &y_lw);
     
+    if(x_n == 0 || y_n == 0) return 0.0f;
+    
     if(!( ((x_n < 10000000 && x_n > -10000000) && (y_n < 10 && y_n > -10)) ||
           ((x_n < 1000000 && x_n > -1000000) && (y_n < 100 && y_n > -100)) ||
           ((x_n < 100000 && x_n > -100000) && (y_n < 1000 && y_n > -1000)) ||
@@ -110,7 +112,7 @@ float __fdiv(float y, float x) {
     _call("funzip", x, &x_n, &x_lw);
     _call("funzip", y, &y_n, &y_lw);
     
-    if(x_n == 0) return 0.0f;
+    if(x_n == 0 || y_n == 0) return 0.0f;
     
     while(x_n < 10000000 && x_n > -10000000) {
         x_n *= 10;
