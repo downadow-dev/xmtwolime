@@ -344,6 +344,10 @@ def compile_obj(obj, root=False, flt=False):
                         else:
                             n *= 10
             
+            while n >= 100000000 and lw > 0:
+                n //= 10
+                lw -= 1
+            
             return str(n | (lw << 27))
         elif type(obj) == BinaryOp and obj.op in '+-/*' and is_float(obj):
             return compile_obj(obj.left, flt=True) + ' ' + compile_obj(obj.right, flt=True) + ' @__f' + obj.op.replace('+', 'add').replace('-', 'sub').replace('/', 'div').replace('*', 'mul')
