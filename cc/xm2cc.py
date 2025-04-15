@@ -323,7 +323,10 @@ def compile_obj(obj, root=False, flt=False):
         elif not flt and not root and is_float(obj):
             return compile_obj(obj, flt=True) + ' @__f2i'
         elif type(obj) == Constant and is_float(obj):
-            n = int(obj.value.split('.')[0])
+            n = 0
+            try:
+                n = int(obj.value.split('.')[0])
+            except Exception: pass
             lw = 0
             
             if '.' in obj.value:
@@ -331,7 +334,9 @@ def compile_obj(obj, root=False, flt=False):
                 for i in range(len(s)):
                     n *= 10
                     lw += 1
-                n += int(s)
+                try:
+                    n += int(s)
+                except Exception: pass
             
             if 'e' in obj.value.lower():
                 num = int(obj.value.lower().replace('f', '').split('e')[1])
@@ -454,8 +459,7 @@ def compile_obj(obj, root=False, flt=False):
                                 code += 'dup ' + str(j) + ' + . {' + param.name + '} ' + str(j) + ' + =\n'
                             code += 'drop\n'
                         i += 1
-                except Exception:
-                    ''
+                except Exception: pass
             
             if obj.body.block_items != None:
                 for item in obj.body.block_items:
@@ -653,8 +657,7 @@ def compile_obj(obj, root=False, flt=False):
                         break
                     functions_floatparams[obj.name] += [is_float(param)]
                     i += 1
-            except Exception:
-                ''
+            except Exception: pass
             return ''
         # создание переменной/массива
         elif type(obj) == DeclList:
@@ -1051,8 +1054,7 @@ def compile_obj(obj, root=False, flt=False):
                 try:
                     for o in item.stmts:
                         code += '\t' + compile_obj(o, root=True) + '\n'
-                except Exception:
-                    ''
+                except Exception: pass
                 
                 i += 1
             
