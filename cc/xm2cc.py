@@ -1077,7 +1077,7 @@ def compile_obj(obj, root=False, flt=False):
         else:
             return '# (unknown) #\n'
     except Exception as e:
-        raise e
+        #raise e
         return '# (error) #\n'
 
 ###################################################################
@@ -1273,6 +1273,6 @@ if __name__ == '__main__':
         structures = {}
         structuresnoptrs = {}
         typedefs = {}
-    print(code)
-    #compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
+    #print(code)
+    compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
 
