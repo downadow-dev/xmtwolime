@@ -79,6 +79,8 @@ def is_float(obj, ptrlvl=0):
         return is_float(obj.left, ptrlvl=ptrlvl) or is_float(obj.right, ptrlvl=ptrlvl)
     elif type(obj) == ArrayRef:
         return is_float(obj.name, ptrlvl=ptrlvl-1)
+    elif type(obj) == TernaryOp:
+        return is_float(obj.iftrue, ptrlvl=ptrlvl) or is_float(obj.iffalse, ptrlvl=ptrlvl)
     elif type(obj) == StructRef:
         struct = get_struct(obj.name)
         for decl in struct:
@@ -1075,7 +1077,7 @@ def compile_obj(obj, root=False, flt=False):
         else:
             return '# (unknown) #\n'
     except Exception as e:
-        #raise e
+        raise e
         return '# (error) #\n'
 
 ###################################################################
@@ -1271,6 +1273,6 @@ if __name__ == '__main__':
         structures = {}
         structuresnoptrs = {}
         typedefs = {}
-    #print(code)
-    compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
+    print(code)
+    #compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
 

@@ -113,6 +113,7 @@ float __fdiv(float y, float x) {
     _call("funzip", y, &y_n, &y_lw);
     
     if(x_n == 0 || y_n == 0) return 0.0f;
+    else if((y_n >= 10000 || y_n <= -10000) && y_lw > 0) return __fdiv(__fstrip2(y_n, y_lw), x);
     
     while(x_n < 10000000 && x_n > -10000000) {
         x_n *= 10;
