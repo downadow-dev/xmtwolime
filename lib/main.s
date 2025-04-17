@@ -23,8 +23,6 @@ LIB:
 	updd
 	
 	mov %R_RETURN_CODE%, 0
+LIB_exit:
 	off
 
-LIB_fail:
-	mov %R_RETURN_CODE%, 30
-	off

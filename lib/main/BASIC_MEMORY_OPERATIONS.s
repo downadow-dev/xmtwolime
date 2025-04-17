@@ -11,7 +11,8 @@ __0_=:
 	
 	mov %R_RETURN_CODE%, 30
 	mov2 %R_FA_2%, 6900000
-	mov %R_FA_4%, <LIB_fail>
+	mov %R_FA_4%, <LIB_exit>
+	mov %R_RETURN_CODE%, 30
 	if %R_FA_0% < %R_FA_2%, %R_FA_4%
 	
 	LIB_=_continue:

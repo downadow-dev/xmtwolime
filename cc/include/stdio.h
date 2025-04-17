@@ -15,7 +15,7 @@ int getchar(void) {
             break;
     }
     
-    return (c != 4 /* Ctrl+D */ && c != 3 /* Ctrl+C */) ? c : EOF;
+    return (c != 4 /* Ctrl+D */) ? c : EOF;
 }
 
 int putchar(int c) {
