@@ -12,9 +12,9 @@ __0_sleep:
     mov %R_RETURN_CODE%, 0
 	LIB_sleep:
         ; Ctrl+C check
-        mov %R_FA_1%, 3
-        mov %R_FA_0%, <LIB_exit>
-        if %R_KEY% == %R_FA_1%, %R_FA_0%
+        mov %R_FA_11%, 3
+        mov %R_FA_10%, <LIB_exit>
+        if %R_KEY% == %R_FA_11%, %R_FA_10%
         
 	    time %R_FA_1%
 	    if %R_FA_1% < %R_FA_0%, %R_FA_2%
@@ -31,9 +31,9 @@ __0_msleep:
     mov %R_RETURN_CODE%, 0
 	LIB_msleep:
         ; Ctrl+C check
-        mov %R_FA_1%, 3
-        mov %R_FA_0%, <LIB_exit>
-        if %R_KEY% == %R_FA_1%, %R_FA_0%
+        mov %R_FA_11%, 3
+        mov %R_FA_10%, <LIB_exit>
+        if %R_KEY% == %R_FA_11%, %R_FA_10%
         
 	    time %R_FA_1%
 	    if %R_FA_1% < %R_FA_0%, %R_FA_2%
