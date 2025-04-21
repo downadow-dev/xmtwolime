@@ -232,44 +232,69 @@ def compile_cond(op):
         return compile_obj(op) + ' 0 !?'
 
 def static_int(obj):
-    if type(obj) == Constant and (obj.type.startswith('unsigned') or obj.type.startswith('long')):
-        obj.type = 'int'
-    
-    if type(obj) == Constant:
-        obj.value = obj.value.lower().replace('u', '').replace('l', '')
-    
-    if type(obj) == Constant and obj.type == 'int' and obj.value == '0':
-        return 0
-    elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0x'):
-        return int(obj.value[2:], base=16)
-    elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0b'):
-        return int(obj.value[2:], base=2)
-    elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0'):
-        return int(obj.value[1:], base=8)
-    elif type(obj) == Constant and obj.type == 'int':
-        return int(obj.value, base=10)
-    elif type(obj) == BinaryOp and obj.op == '+':
-        return static_int(obj.left) + static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '-':
-        return static_int(obj.left) - static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '*':
-        return static_int(obj.left) * static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '/':
-        return static_int(obj.left) // static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '%':
-        return static_int(obj.left) % static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '^':
-        return static_int(obj.left) ^ static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '<<':
-        return static_int(obj.left) << static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '>>':
-        return static_int(obj.left) >> static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '|':
-        return static_int(obj.left) | static_int(obj.right)
-    elif type(obj) == BinaryOp and obj.op == '&':
-        return static_int(obj.left) & static_int(obj.right)
-    elif type(obj) == UnaryOp and obj.op == 'sizeof':
-        return 1
+    try:
+        if type(obj) == Constant and (obj.type.startswith('unsigned') or obj.type.startswith('long')):
+            obj.type = 'int'
+        
+        if type(obj) == Constant and obj.type == 'int':
+            obj.value = obj.value.lower().replace('u', '').replace('l', '')
+        
+        if type(obj) == Constant and obj.type == 'int' and obj.value == '0':
+            return 0
+        elif type(obj) == Constant and obj.type == 'char':
+            return ord(preprocess_string(obj.value))
+        elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0x'):
+            return int(obj.value[2:], base=16)
+        elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0b'):
+            return int(obj.value[2:], base=2)
+        elif type(obj) == Constant and obj.type == 'int' and obj.value.startswith('0'):
+            return int(obj.value[1:], base=8)
+        elif type(obj) == Constant and obj.type == 'int':
+            return int(obj.value, base=10)
+        elif type(obj) == BinaryOp and obj.op == '+':
+            return static_int(obj.left) + static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '-':
+            return static_int(obj.left) - static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '*':
+            return static_int(obj.left) * static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '/':
+            return static_int(obj.left) // static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '%':
+            return static_int(obj.left) % static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '^':
+            return static_int(obj.left) ^ static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '<<':
+            return static_int(obj.left) << static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '>>':
+            return static_int(obj.left) >> static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '|':
+            return static_int(obj.left) | static_int(obj.right)
+        elif type(obj) == BinaryOp and obj.op == '&':
+            return static_int(obj.left) & static_int(obj.right)
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ID and is_array(obj.expr.name):
+            return None
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == Typename and \
+        type(obj.expr.type) == TypeDecl and (type(obj.expr.type.type) == Struct or type(obj.expr.type.type) == Union) and \
+        obj.expr.type.type.name in structs:
+            return get_struct_length(structs[obj.expr.type.type.name])
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == StructRef:
+            for decl in structs[structures[obj.expr.name.name]]:
+                if decl.name == obj.expr.field.name:
+                    if type(decl.type) == ArrayDecl:
+                        return static_int(decl.type.dim)
+                    else:
+                        return 1
+            return 0
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ID and obj.expr.name in structuresnoptrs:
+            return get_struct_length(structs[structures[obj.expr.name]])
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == UnaryOp and obj.expr.op == '*' and type(obj.expr.expr) == ID and obj.expr.expr.name in structures and not obj.expr.expr.name in structuresnoptrs:
+            return get_struct_length(structs[structures[obj.expr.expr.name]])
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ArrayRef and type(obj.expr.name) == ID and obj.expr.name.name in structures and not obj.expr.name.name in structuresnoptrs:
+            return get_struct_length(structs[structures[obj.expr.name.name]])
+        elif type(obj) == UnaryOp and obj.op == 'sizeof':
+            return 1
+    except Exception: pass
+    return None
 
 def preprocess_typedefs(obj):
     if type(obj) == Decl:
@@ -321,6 +346,12 @@ def compile_obj(obj, root=False, flt=False):
             return ''
         elif type(obj) == DoWhile and type(obj.cond) == Constant and obj.cond.type == 'int' and obj.cond.value == '0':
             return compile_obj(obj.stmt)
+        # sizeof(массив)
+        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ID and is_array(obj.expr.name) and not root:
+            return get_var(obj.expr.name)[:-1] + '.length}'
+        #####################
+        elif static_int(obj) != None and not root:
+            return str(static_int(obj))
         # float
         elif not flt and not root and is_float(obj):
             return compile_obj(obj, flt=True) + ' @__f2i'
@@ -790,40 +821,11 @@ def compile_obj(obj, root=False, flt=False):
             code += compile_obj(obj.iffalse, flt=flt) + ' ___tEndif' + str(saved) + ':'
             
             return code
-        # число
-        elif type(obj) == Constant and (obj.type == 'int' or obj.type.startswith('unsigned') or obj.type.startswith('long')) and not root:
-            return str(static_int(obj))
-        # символ
-        elif type(obj) == Constant and obj.type == 'char' and not root:
-            return str(ord(preprocess_string(obj.value)))
         # элемент массива
         elif type(obj) == ArrayRef and not root:
             return compile_obj(obj.name) + ' ' + compile_obj(obj.subscript) \
             + ((' ' + str(get_struct_length(structs[structures[obj.name.name]])) + ' *') if type(obj.name) == ID and \
             obj.name.name in structures else '') + ' + .'
-        # sizeof
-        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ID and is_array(obj.expr.name) and not root:
-            return get_var(obj.expr.name)[:-1] + '.length}'
-        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == Typename and \
-        type(obj.expr.type) == TypeDecl and (type(obj.expr.type.type) == Struct or type(obj.expr.type.type) == Union) and \
-        obj.expr.type.type.name in structs and not root:
-            return str(get_struct_length(structs[obj.expr.type.type.name]))
-        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == StructRef and not root:
-            for decl in structs[structures[obj.expr.name.name]]:
-                if decl.name == obj.expr.field.name:
-                    if type(decl.type) == ArrayDecl:
-                        return str(static_int(decl.type.dim))
-                    else:
-                        return '1'
-            return '0'
-        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ID and obj.expr.name in structuresnoptrs and not root:
-            return str(get_struct_length(structs[structures[obj.expr.name]]))
-        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == UnaryOp and obj.expr.op == '*' and type(obj.expr.expr) == ID and obj.expr.expr.name in structures and not obj.expr.expr.name in structuresnoptrs and not root:
-            return str(get_struct_length(structs[structures[obj.expr.expr.name]]))
-        elif type(obj) == UnaryOp and obj.op == 'sizeof' and type(obj.expr) == ArrayRef and type(obj.expr.name) == ID and obj.expr.name.name in structures and not obj.expr.name.name in structuresnoptrs and not root:
-            return str(get_struct_length(structs[structures[obj.expr.name.name]]))
-        elif type(obj) == UnaryOp and obj.op == 'sizeof':
-            return '1'
         # -выражение
         elif type(obj) == UnaryOp and obj.op == '-':
             return compile_obj(obj.expr, flt=flt, root=root) + ' neg'
