@@ -107,7 +107,6 @@ float __fmul(float y, float x) {
 float __fdiv(float y, float x) {
     int x_n, x_lw;
     int y_n, y_lw;
-    __fstrip(&x);
     __fstrip(&y);
     _call("funzip", x, &x_n, &x_lw);
     _call("funzip", y, &y_n, &y_lw);
