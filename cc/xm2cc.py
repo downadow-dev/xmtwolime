@@ -1167,8 +1167,6 @@ def maketree(code):
 
 # перевести в ассемблерный код Makexm2c
 def compile_for_xmtwolime(prog_name, tree, outfile):
-    current_label = 0              # номер следующей вспомогательной метки
-    
     def asm(code):
         print(code, file=outfile)
     
@@ -1234,11 +1232,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
             asm('ild ' + getrstackptr() + ', ' + getrret())
             asm('jmp ' + getrret())
         elif block[0] == 'call':
-            asm('mov2 ' + getreg(0) + ', <__0_' + block[1][0] + '>')
-            asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
-            asm('jmp ' + getreg(0))
-            asm(prog_name + '_L' + str(current_label) + ':')
-            current_label += 1
+            asm('call ' + getrret() + ', <__0_' + block[1][0] + '>')
 
 ################################################################################
 
@@ -1277,4 +1271,5 @@ if __name__ == '__main__':
         typedefs = {}
     #print(code)
     compile_for_xmtwolime(sys.argv[1], maketree(preprocess(code)), sys.stdout)
+
 
