@@ -40,13 +40,31 @@ void __fnormalize(float *x, float *y) {
     _call("funzip", *y, &y_n, &y_lw);
     
     if(x_lw < y_lw) {
-        for(int i = x_lw; i < y_lw; i++)
+        int last = y_lw - x_lw;
+        for(int i = 0; i < last; i++) {
             x_n *= 10;
-        x_lw = y_lw;
+            x_lw++;
+            if(x_n >= 10000000 || x_n <= -10000000) {
+                while(y_lw > x_lw) {
+                    y_n /= 10;
+                    y_lw--;
+                }
+                break;
+            }
+        }
     } else if(x_lw > y_lw) {
-        for(int i = y_lw; i < x_lw; i++)
+        int last = x_lw - y_lw;
+        for(int i = 0; i < last; i++) {
             y_n *= 10;
-        y_lw = x_lw;
+            y_lw++;
+            if(y_n >= 10000000 || y_n <= -10000000) {
+                while(x_lw > y_lw) {
+                    x_n /= 10;
+                    x_lw--;
+                }
+                break;
+            }
+        }
     }
     
     *x = _call("fzip", x_n, x_lw);
