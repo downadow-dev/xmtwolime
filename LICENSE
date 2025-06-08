@@ -1,6 +1,4 @@
-ТЕКСТ НИЖЕ НЕ РАСПРОСТРАНЯЕТСЯ НА ВСЁ, ЧТО В ``cc/pycparser``!
-.
-Software (Программное обеспечение):
+Лицензии для содержимого данного репозитория (кроме ``cc/pycparser``):
 
 	This is free and unencumbered software released into the public domain.
 
@@ -27,7 +25,7 @@ Software (Программное обеспечение):
 
 	For more information, please refer to <http://unlicense.org/>
 
-Another (другое, кроме .git):
+или:
 
 	CC0 (см. <https://freedomdefined.org/Licenses/CC-0>).
 
