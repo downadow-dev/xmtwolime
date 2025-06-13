@@ -233,6 +233,9 @@ def compile_cond(op):
 
 def static_int(obj):
     try:
+        if type(obj) == UnaryOp:
+            obj.expr = preprocess_typedefs(obj.expr)
+        
         if type(obj) == Constant and (obj.type.startswith('unsigned') or obj.type.startswith('long')):
             obj.type = 'int'
         
@@ -305,6 +308,8 @@ def preprocess_typedefs(obj):
         obj.type = preprocess_typedefs(obj.type)
     elif type(obj) == Cast:
         obj.to_type.type = preprocess_typedefs(obj.to_type.type)
+    elif type(obj) == Typename:
+        obj.type = preprocess_typedefs(obj.type)
     
     if type(obj) == PtrDecl and type(obj.type) == PtrDecl:
         obj.type = preprocess_typedefs(obj.type.type)
