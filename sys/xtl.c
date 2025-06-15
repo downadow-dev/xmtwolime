@@ -17,7 +17,7 @@ void main(int argc, char **argv) {
     int length = strlen(stars);
     char tmp;
     
-    for(int i = 0; i < 375; i++, msleep(30)) {
+    for(int i = 0; i < 200; i++, msleep(50)) {
         tmp = stars[0];
         for(int j = 1; j < length; j++)
             stars[j - 1] = stars[j];

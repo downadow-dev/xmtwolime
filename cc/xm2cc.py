@@ -177,16 +177,6 @@ def preprocess_string(s):
         .replace('\\0', '\0')                   \
         .replace('%/\\\\/%', '\\')
 
-# код в начале программы
-def get_init_code():
-    return '''
-/alloc ___ret[64]
-/alloc __retptr
-0 {__retptr} =
-/define ___function :({___ret} {__retptr}! +) = ({__retptr}! ++) {__retptr} =
-/define return :({__retptr}! --) {__retptr} = (({___ret} {__retptr}! +) .) goto
-'''
-
 # "2 == 4" => "2 4 =?" и т. д.
 def compile_cond(op):
     global current_if
@@ -478,7 +468,7 @@ def compile_obj(obj, root=False, flt=False):
                     savedfloatptrs = floatptrs.copy()
                     savedfloatptrptrs = floatptrptrs.copy()
                 
-                code += obj.decl.name + ': {___function}\n'
+                code += obj.decl.name + ': function\n'
                 
                 try:
                     i = 0
@@ -503,7 +493,7 @@ def compile_obj(obj, root=False, flt=False):
                 for item in obj.body.block_items:
                     code += compile_obj(item, root=True) + '\n'
             
-            code += '\n0 ' + ('{return}' if current_function != 'main' else 'exit')
+            code += '\n0 ' + ('return' if current_function != 'main' else 'exit')
             
             if obj.decl.name != 'main':
                 code += '\n' + obj.decl.name + '___END:\n'
@@ -666,7 +656,7 @@ def compile_obj(obj, root=False, flt=False):
             return '\n"' + s.replace('"', '`') + '" ___s' + str(current_string) + '\n&___s' + str(current_string)
         # return
         elif type(obj) == Return:
-            return (compile_obj(obj.expr, flt=is_float(current_function)) if obj.expr != None else '0') + ' ' + ('{return}' if current_function != 'main' else 'exit')
+            return (compile_obj(obj.expr, flt=is_float(current_function)) if obj.expr != None else '0') + ' ' + ('return' if current_function != 'main' else 'exit')
         # FuncDecl
         elif type(obj) == Decl and type(obj.type) == FuncDecl:
             functions += [obj.name]
@@ -771,7 +761,7 @@ def compile_obj(obj, root=False, flt=False):
             
             code += '/alloc ' + current_function + '.' + obj.name + '___ARRAY__[64]\n'
             code += '/define ' + current_function + '.' + obj.name + ' :{' \
-                + current_function + '.' + obj.name + '___ARRAY__} {__retptr}! +\n'
+                + current_function + '.' + obj.name + '___ARRAY__} retptr +\n'
             if obj.init != None:
                 code += (compile_obj(obj.init, flt=is_float(obj)) if obj.init != None else '0') + ' ' + get_var(obj.name) + ' =\n'
             
@@ -1185,17 +1175,21 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
     
     # получить начало стека
     def getstackstart():
-        return 6900000
+        return 6900064
     
     # получить регистр для хранения адреса возврата
     def getrret():
         return getreg(8)
+    
+    def getrfret():
+        return getreg(20)
     
     ###########################
     
     asm(prog_name + ':')
     asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
     asm('mov %R_FA_24%, %OUT_ST%')  # сброс указателя вывода
+    asm('mov ' + getrfret() + ', ' + str(getstackstart() - 64))
     
     ###########################
     
@@ -1236,6 +1230,20 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
             asm('dec ' + getrstackptr())
             asm('ild ' + getrstackptr() + ', ' + getrret())
             asm('jmp ' + getrret())
+        elif block[0] == 'call' and block[1][0] == 'function':
+            asm('dec ' + getrstackptr())
+            asm('ild ' + getrstackptr() + ', ' + getreg(0))
+            asm('isv ' + getreg(0) + ', ' + getrfret())
+            asm('inc ' + getrfret())
+        elif block[0] == 'call' and block[1][0] == 'return':
+            asm('dec ' + getrfret())
+            asm('ild ' + getrfret() + ', ' + getreg(0))
+            asm('jmp ' + getreg(0))
+        elif block[0] == 'call' and block[1][0] == 'retptr':
+            asm('mov ' + getreg(0) + ', ' + str(getstackstart() - 64))
+            asm('sub ' + getrfret() + ' ' + getreg(0) + ', ' + getreg(0))
+            asm('isv ' + getreg(0) + ', ' + getrstackptr())
+            asm('inc ' + getrstackptr())
         elif block[0] == 'call':
             asm('call ' + getrret() + ', <__0_' + block[1][0] + '>')
 
@@ -1253,7 +1261,7 @@ if __name__ == '__main__':
     if sys.argv[2] != '':
         cppargs += sys.argv[2].split(' ')
     
-    code = get_init_code() + '\n'
+    code = ''
     for filename in sys.argv[3:]:
         ast = parse_file(filename, use_cpp=True, cpp_args=cppargs)
         
