@@ -113,7 +113,7 @@ float __fmul(float y, float x) {
           ((x_n < 100 && x_n > -100) && (y_n < 1000000 && y_n > -1000000)) ||
           ((x_n < 10 && x_n > -10) && (y_n < 10000000 && y_n > -10000000)) )) {
 
-        return __fmul(__fstrip2(y_n, y_lw), __fstrip2(x_n, x_lw));
+        return (x_lw > 0 || y_lw > 0) ? __fmul(__fstrip2(y_n, y_lw), __fstrip2(x_n, x_lw)) : 0;
     }
     
     x_n  *= y_n;
