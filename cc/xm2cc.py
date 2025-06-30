@@ -717,9 +717,10 @@ def compile_obj(obj, root=False, flt=False):
             if obj.init != None and type(obj.init) == InitList:
                 code += get_var(obj.name) + ' 0 ' + get_var(obj.name)[:-1] + '.length}' + ' memset\n'
                 for i in range(len(obj.init.exprs)):
-                    code += compile_obj(obj.init.exprs[i], flt=(get_var(obj.name)[1:-1] in floatptrs or get_var(obj.name)[1:-1] in floatptrptrs)) + ' (' + get_var(obj.name) + ' ' \
-                    + (str(i) if type(obj.init.exprs[i]) != NamedInitializer else compile_obj(obj.init.exprs[i].name[0])) \
-                    + ' +) =\n'
+                    if not (type(obj.init.exprs[i]) == Constant and obj.init.exprs[i].type == 'int' and obj.init.exprs[i].value == '0'):
+                        code += compile_obj(obj.init.exprs[i], flt=(get_var(obj.name)[1:-1] in floatptrs or get_var(obj.name)[1:-1] in floatptrptrs)) + ' (' + get_var(obj.name) + ' ' \
+                        + (str(i) if type(obj.init.exprs[i]) != NamedInitializer else compile_obj(obj.init.exprs[i].name[0])) \
+                        + ' +) =\n'
             elif obj.init != None and type(obj.init) == Constant:
                 for i in range(len(preprocess_string(obj.init.value))):
                     code += str(ord(preprocess_string(obj.init.value)[i])) + ' (' + get_var(obj.name) + ' ' + str(i) + ' +) =\n'
