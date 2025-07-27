@@ -126,7 +126,8 @@ char *strcat(char *dst, char *src) {
 }
 
 char *strncpy(char *dst, char *src, size_t n) {
-    *(mempcpy(dst, src, strnlen(src, n))) = '\0';
+    memset(dst, 0, n);
+    mempcpy(dst, src, strnlen(src, n));
     return dst;
 }
 
