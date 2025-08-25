@@ -353,7 +353,7 @@ def compile_obj(obj, root=False, flt=False):
         elif type(obj) == Constant and is_float(obj):
             n = 0
             try:
-                n = int(obj.value.split('.')[0])
+                n = int(obj.value.lower().replace('f', '').split('.')[0].split('e')[0])
             except Exception: pass
             lw = 0
             
@@ -376,6 +376,7 @@ def compile_obj(obj, root=False, flt=False):
                             lw -= 1
                         else:
                             n *= 10
+                        num -= 1
             
             while n >= 100000000 and lw > 0:
                 n //= 10
