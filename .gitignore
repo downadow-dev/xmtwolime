@@ -1,0 +1,7 @@
+/out.s
+/os-builder/__pycache__
+/idt/idt
+/cc/*tab.py
+/cc/__pycache__
+/cc/*/__pycache__
+/cc/*/*/__pycache__
