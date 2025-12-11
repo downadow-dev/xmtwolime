@@ -842,7 +842,7 @@ def compile_obj(obj, root=False, flt=False, uns=False):
             elif type(obj.type) == PtrDecl and type(obj.type.type) == PtrDecl and type(obj.type.type.type) == TypeDecl and type(obj.type.type.type.type) == IdentifierType and 'unsigned' in obj.type.type.type.type.names:
                 unsptrptrs += [get_var(obj.name)[1:-1]]
             
-            code += '/alloc ' + current_function + '.' + obj.name + '___ARRAY__[64]\n'
+            code += '/alloc ' + current_function + '.' + obj.name + '___ARRAY__[256]\n'
             code += '/define ' + current_function + '.' + obj.name + ' :{' \
                 + current_function + '.' + obj.name + '___ARRAY__} retptr +\n'
             if obj.init != None:
@@ -1264,7 +1264,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
     
     # получить начало стека
     def getstackstart():
-        return 6900064
+        return 6900256
     
     # получить регистр для хранения адреса возврата
     def getrret():
@@ -1278,7 +1278,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
     asm(prog_name + ':')
     asm('mov ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
     asm('mov %R_FA_7%, %OUT_ST%')  # сброс указателя вывода
-    asm('mov ' + getrfret() + ', ' + str(getstackstart() - 64))
+    asm('mov ' + getrfret() + ', ' + str(getstackstart() - 256))
     
     ###########################
     
@@ -1320,7 +1320,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
             asm('pop ' + getrfret() + ', ' + getreg(0) + ', 1')
             asm('jmp ' + getreg(0))
         elif block[0] == 'call' and block[1][0] == 'retptr':
-            asm('mov ' + getreg(0) + ', ' + str(getstackstart() - 64))
+            asm('mov ' + getreg(0) + ', ' + str(getstackstart() - 256))
             asm('sub ' + getrfret() + ' ' + getreg(0) + ', ' + getreg(0))
             asm('push ' + getreg(0) + ', ' + getrstackptr() + ', 1')
         elif block[0] == 'call':
