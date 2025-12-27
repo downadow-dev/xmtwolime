@@ -1006,7 +1006,7 @@ def compile_obj(obj, root=False, flt=False, uns=False):
                 code += compile_obj(o, flt=is_float(o)) + ' ({' + obj.name.name + '.___vargs} ' + str(i) + ' +) =\n'
                 i += 1
             code += ('@' if obj.name.name in functions else '') + obj.name.name
-            if (obj.name.name in functions or obj.name.name == 'memset' or obj.name.name == 'memcpy' or obj.name.name == 'getc') and root:
+            if (obj.name.name in functions or obj.name.name == 'memset' or obj.name.name == 'memcpy' or obj.name.name == 'getc' or obj.name.name == 'h256_init') and root:
                 code += ' drop'
             return code
         # инкремент и декремент

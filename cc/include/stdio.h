@@ -192,7 +192,6 @@ int vsprintf(char *s, char *fmt, va_list ap) {
                     s = _sprinti(l, s + (lw - (p - s)));
                 }
                 
-                
                 break;
 #endif
             case 'c':
