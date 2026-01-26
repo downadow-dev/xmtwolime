@@ -7,7 +7,6 @@ __0_=:
 	mov %R_FA_3%, <LIB_=_continue>
 	if %R_USER% == %R_FA_2%, %R_FA_3%
 	
-	mov %R_RETURN_CODE%, 30
 	mov %R_FA_2%, 6900000
 	mov %R_FA_4%, <LIB_exit>
 	mov %R_RETURN_CODE%, 30
