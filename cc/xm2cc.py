@@ -1162,8 +1162,7 @@ def compile_obj(obj, root=False, flt=False, uns=False):
             return ''
         else:
             return '# (unknown) #\n'
-    except Exception as e:
-        #raise e
+    except Exception:
         return '# (error) #\n'
 
 ###################################################################
